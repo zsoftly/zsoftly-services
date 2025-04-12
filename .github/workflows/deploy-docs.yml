@@ -84,7 +84,15 @@ jobs:
           echo "ready=true" >> $GITHUB_OUTPUT
           echo "preview_url=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_OUTPUT
           
-      - name: Notify preparation complete
+      - name: Send Google Chat notification - Ready for Deployment
+        if: github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "🔄 **Documentation Build Complete**\n\nThe ZSoftly documentation has been built successfully and is ready for manual deployment.\n\n**Repository**: ${{ github.repository }}\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\nPlease review and approve the deployment on the GitHub Actions page."}' \
+          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+      
+      - name: Notify preparation complete (PR only)
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -131,8 +139,22 @@ jobs:
             sleep $INTERVAL
           done
         
-      - name: Send notification on success
-        if: success()
+      - name: Send Google Chat notification on success
+        if: success() && github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "✅ **Documentation Deployment Successful**\n\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\n\n**Repository**: ${{ github.repository }}\n**URL**: ${{ steps.deployment.outputs.page_url }}\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"}' \
+          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+        
+      - name: Send Google Chat notification on failure
+        if: failure() && github.ref == 'refs/heads/main'
+        run: |
+          curl -X POST -H 'Content-Type: application/json' \
+          -d '{"text": "⚠️ **Documentation Deployment Failed**\n\nThe ZSoftly documentation deployment to GitHub Pages has failed.\n\n**Repository**: ${{ github.repository }}\n**Action**: [View workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"}' \
+          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+        
+      - name: Send notification on success (PR only)
+        if: success() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -144,8 +166,8 @@ jobs:
               body: '✅ Documentation successfully deployed to GitHub Pages: ${{ steps.deployment.outputs.page_url }}'
             })
       
-      - name: Send notification on failure
-        if: failure()
+      - name: Send notification on failure (PR only)
+        if: failure() && github.event_name == 'pull_request'
         uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}

@@ -15,8 +15,24 @@ The documentation site is built and deployed using a multi-stage GitHub Actions 
 - **Prepare**: Second job that prepares the deployment and creates a staging environment
 - **Deploy**: Final job with manual approval requirement for deploying to GitHub Pages
 - **Features**: Dark/light theme switching, responsive design, search functionality
+- **Notifications**: Google Chat webhook notifications for deployment status updates
 
-The deployment process requires manual approval through GitHub's environment protection feature, giving you control over when documentation is published to production.
+The deployment process requires manual approval through GitHub's environment protection feature, giving you control over when documentation is published to production. Once the build is complete, a notification is sent to the configured Google Chat space to alert the team that deployment is ready for approval.
+
+### Google Chat Webhook Setup
+
+To receive deployment notifications in Google Chat:
+
+1. In Google Chat, create a space or use an existing one for deployment notifications
+2. Click on the space name > "Apps & Integrations" > "Add webhooks"
+3. Name your webhook (e.g., "ZSoftly Docs Deployment")
+4. Copy the webhook URL provided
+5. In your GitHub repository, go to Settings > Secrets and Variables > Actions
+6. Add a new repository secret with name `GOOGLE_CHAT_WEBHOOK_URL` and paste the webhook URL as the value
+
+Once configured, the CI/CD pipeline will send the following notifications to the Google Chat space:
+- When a build is complete and ready for deployment approval
+- When deployment succeeds or fails
 
 ## Local Development Setup
 
@@ -62,7 +78,8 @@ export PATH="$HOME/.local/bin:$PATH"
 1. Create or edit Markdown files in the `docs/` directory
 2. Preview changes locally using `mkdocs serve`
 3. Commit and push changes to the `main` branch
-4. GitHub Actions will automatically build and deploy the updated site
+4. GitHub Actions will automatically build the site and send a notification to Google Chat
+5. Follow the link in the notification to review and approve the deployment
 
 ## Folder Structure
 
@@ -79,6 +96,7 @@ export PATH="$HOME/.local/bin:$PATH"
 - **Material for MkDocs**: Theme for professional documentation
 - **GitHub Actions**: CI/CD pipeline automation
 - **GitHub Pages**: Hosting platform
+- **Google Chat Webhooks**: Deployment notifications
 
 ## Contact
 
