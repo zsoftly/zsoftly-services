@@ -67,12 +67,16 @@ We deliver our security services through our proven four-level framework:
 In addition to AWS security services, we provide expertise in implementing and managing leading open source security solutions:
 
 - **Wazuh**: Enterprise-grade security monitoring, threat detection, and response
-- **Prisma Cloud**: Cloud-native security platform for comprehensive protection
+- **Prisma Cloud**: Cloud-native security platform from Palo Alto Networks for comprehensive protection (Official Partner)
 - **Keycloak**: Open source identity and access management
 - **Authentik**: Modern identity provider for authentication and authorization
 - **Harbor Registry**: Secure container image registry with vulnerability scanning
+- **JumpCloud**: Cloud directory platform for secure identity and access management (Official Partner)
+- **Vanta**: Automated compliance monitoring and security platform (Official Partner)
 
-Contact us to learn how we can help you integrate these powerful open source tools into your security ecosystem.
+As official partners with Vanta, Palo Alto's Prisma Cloud, and JumpCloud, we offer enhanced support, specialized expertise, and optimized implementation of these powerful security solutions.
+
+Contact us to learn how we can help you integrate these powerful security tools into your security ecosystem.
 
 ## AWS Technologies Leveraged
 

@@ -20,22 +20,26 @@ ZSoftly delivers comprehensive IT solutions across four key pillars:
 
 ZSoftly provides expertise in implementing and managing a wide range of open source tools. We help organizations successfully adopt, integrate, and maintain solutions such as:
 
-- **Identity & Access Management**: Keycloak, Authentik
+- **Identity & Access Management**: Keycloak, Authentik, JumpCloud (Official Partner)
 - **DevOps Tools**: Gitea, Harbor Registry
-- **Security & Monitoring**: Wazuh, SigNoz, Prisma Cloud
+- **Security & Monitoring**: Wazuh, SigNoz, Prisma Cloud (Official Partner)
 - **Observability**: Datadog, Traefik
+- **Compliance Automation**: Vanta (Official Partner)
 
-Contact us to discuss how we can help you leverage these powerful open source technologies within your organization.
+Contact us to discuss how we can help you leverage these powerful technologies within your organization.
 
 ## AWS Partnership
 
 As an AWS Partner, ZSoftly Technologies leverages the full power of Amazon Web Services to deliver secure, scalable, and cost-effective solutions. Our team includes AWS-certified professionals with deep expertise in AWS technologies and best practices.
+
+We are actively working toward achieving AWS Advanced Tier Partner status by September 2025, demonstrating our commitment to excellence in AWS implementation and support. This journey involves rigorous compliance requirements and advanced certifications that further enhance our ability to deliver exceptional AWS solutions.
 
 1. **Team Expertise**: Our team brings diverse, specialized experience from enterprise environments
 2. **Canadian-Based Support**: Local presence and understanding of Canadian business needs
 3. **SMB Focus**: Specialized in right-sizing enterprise solutions for mid-market companies
 4. **Compliance Expertise**: Deep understanding of regulatory requirements for Canadian businesses
 5. **Enterprise-Grade, Cost-Effective Solutions**: Delivering high-quality services at accessible price points
+6. **Strategic Partnerships**: Official partnerships with industry leaders including Vanta, Palo Alto's Prisma Cloud, and JumpCloud
 
 ## Get Started
 

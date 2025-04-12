@@ -66,6 +66,9 @@ We help organizations leverage powerful open source tools to accelerate their di
 - **Authentik**: Next-generation identity provider for streamlined authentication
 - **SigNoz**: Application performance monitoring and observability
 - **Traefik**: API gateway and edge router for microservices architectures
+- **JumpCloud**: Cloud directory platform for unified identity management (Official Partner)
+- **Vanta**: Automated compliance monitoring and security platform (Official Partner)
+- **Prisma Cloud**: Palo Alto Networks' comprehensive cloud security platform (Official Partner)
 
 These tools complement our AWS expertise to provide comprehensive digital transformation solutions tailored to your specific needs.
 
