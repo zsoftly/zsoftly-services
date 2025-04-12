@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block extrahead %}
+  {{ super() }}
+  <!-- Add any extra head elements here -->
+{% endblock %}
+
+{% block scripts %}
+  {{ super() }}
+  <!-- Custom script to insert the slogan after the header -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      // Create the slogan element
+      var sloganElement = document.createElement("div");
+      sloganElement.className = "md-header-slogan";
+      sloganElement.innerHTML = '<div class="slogan">Empowering Businesses with AI & Cloud-First IT Solutions</div>';
+      
+      // Get the header element
+      var headerElement = document.querySelector(".md-header");
+      
+      // Insert the slogan after the header
+      if (headerElement) {
+        headerElement.parentNode.insertBefore(sloganElement, headerElement.nextSibling);
+      }
+    });
+  </script>
+{% endblock %}

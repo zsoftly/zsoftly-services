@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block header %}
+  {{ super() }}
+  <!-- Properly implement the header with the slogan -->
+  {% if page.meta and page.meta.hide %}
+    {% set hide = "hidden" if "header" in page.meta.hide %}
+  {% endif %}
+  <header class="md-header" data-md-component="header" {{ hide }}>
+    <nav
+      class="md-header__inner md-grid"
+      aria-label="{{ lang.t('header.title') }}"
+    >
+      <a
+        href="{{ config.extra.homepage | d(nav.homepage.url, true) | url }}"
+        title="{{ config.site_name | e }}"
+        class="md-header__button md-logo"
+        aria-label="{{ config.site_name }}"
+        data-md-component="logo"
+      >
+        {% include "partials/logo.html" %}
+      </a>
+      <label class="md-header__button md-icon" for="__drawer">
+        {% include ".icons/material/menu" ~ ".svg" %}
+      </label>
+      <div class="md-header__title" data-md-component="header-title">
+        <div class="md-header__ellipsis">
+          <div class="md-header__topic">
+            <span class="md-ellipsis">
+              {{ config.site_name }}
+            </span>
+          </div>
+          <div class="md-header__topic" data-md-component="header-topic">
+            <span class="md-ellipsis">
+              {% if page and page.meta and page.meta.title %}
+                {{ page.meta.title }}
+              {% else %}
+                {{ page.title }}
+              {% endif %}
+            </span>
+          </div>
+        </div>
+      </div>
+      <div class="md-header__options">
+        {% if config.theme.palette %}
+          {% if config.theme.palette | length > 1 %}
+            {% include "partials/palette.html" %}
+          {% endif %}
+        {% endif %}
+        {% if config.extra.alternate %}
+          {% include "partials/alternate.html" %}
+        {% endif %}
+      </div>
+      {% if "material/search" in config.plugins %}
+        <label class="md-header__button md-icon" for="__search">
+          {% include ".icons/material/magnify.svg" %}
+        </label>
+        {% include "partials/search.html" %}
+      {% endif %}
+      {% if config.repo_url %}
+        <div class="md-header__source">
+          {% include "partials/source.html" %}
+        </div>
+      {% endif %}
+    </nav>
+    <!-- Add our custom slogan below the main navigation -->
+    <div class="md-header-slogan">
+      <div class="slogan">Empowering Businesses with AI & Cloud-First IT Solutions</div>
+    </div>
+  </header>
+{% endblock %}

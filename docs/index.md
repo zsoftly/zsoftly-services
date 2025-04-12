@@ -1,7 +1,7 @@
 # ZSoftly
 
 <div class="text-center">
-  <img src="assets/images/217183861/Logo%20Files/png/Color%20logo%20with%20background.png" alt="ZSoftly Logo" class="company-logo">
+  <img class="company-logo" alt="ZSoftly Logo">
 </div>
 
 ## Enterprise-Grade IT Solutions for Mid-Market Businesses
