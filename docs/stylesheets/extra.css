@@ -1,0 +1,245 @@
+/* ZSoftly Brand Colors */
+:root {
+  /* Primary brand color - Deep blue */
+  --zsoftly-primary: #00198a;
+  /* Secondary brand color - Light blue */
+  --zsoftly-secondary: #dae5fa;
+  /* Accent color - White */
+  --zsoftly-accent: #ffffff;
+  
+  /* MkDocs Material theme color variables */
+  --md-primary-fg-color: var(--zsoftly-primary);
+  --md-primary-fg-color--light: var(--zsoftly-secondary);
+  --md-primary-fg-color--dark: #000d4d;
+  --md-accent-fg-color: var(--zsoftly-primary);
+}
+
+/* Dark mode color overrides */
+[data-md-color-scheme="slate"] {
+  /* Lighter blue for dark mode primary to improve visibility */
+  --md-primary-fg-color: #1a34b8;
+  --md-primary-fg-color--light: var(--zsoftly-secondary);
+  --md-primary-fg-color--dark: var(--zsoftly-primary);
+  --md-accent-fg-color: #6f74dd;
+  
+  /* Improving dark mode background and text contrast */
+  --md-default-bg-color: #121212;
+  --md-default-fg-color: rgba(255, 255, 255, 0.87);
+  --md-default-fg-color--light: rgba(255, 255, 255, 0.68);
+  --md-default-fg-color--lighter: rgba(255, 255, 255, 0.32);
+  --md-default-fg-color--lightest: rgba(255, 255, 255, 0.12);
+  
+  /* Code blocks in dark mode */
+  --md-code-bg-color: #2d2d3f;
+  --md-code-fg-color: #f8f8f2;
+  
+  /* Footer in dark mode */
+  --md-footer-bg-color: var(--zsoftly-primary);
+  --md-footer-fg-color: var(--zsoftly-accent);
+  
+  /* Link colors in dark mode */
+  --md-typeset-a-color: var(--zsoftly-secondary);
+}
+
+/* Background elements - with dark mode support */
+.md-main {
+  background-color: var(--md-default-bg-color);
+}
+
+/* Footer using brand colors */
+.md-footer {
+  background-color: var(--zsoftly-primary);
+  color: var(--zsoftly-accent);
+}
+
+/* Subtle brand color backgrounds for elements */
+.md-typeset blockquote {
+  border-left-color: var(--zsoftly-primary);
+  background-color: rgba(218, 229, 250, 0.2);
+}
+
+[data-md-color-scheme="slate"] .md-typeset blockquote {
+  background-color: rgba(218, 229, 250, 0.1);
+}
+
+/* Admonitions with brand colors */
+.md-typeset .admonition,
+.md-typeset details {
+  border-color: var(--zsoftly-primary);
+}
+
+.md-typeset .admonition > .admonition-title,
+.md-typeset details > summary {
+  background-color: rgba(218, 229, 250, 0.2);
+}
+
+[data-md-color-scheme="slate"] .md-typeset .admonition > .admonition-title,
+[data-md-color-scheme="slate"] .md-typeset details > summary {
+  background-color: rgba(218, 229, 250, 0.1);
+}
+
+/* Logo sizing in header */
+.md-header__button.md-logo img {
+  height: 2rem;
+}
+
+/* Logo handling for dark mode - Fixed path with URL encoding for spaces */
+[data-md-color-scheme="slate"] .md-header__button.md-logo img {
+  content: url('../assets/images/217183861/Logo%20Files/png/White%20logo%20-%20no%20background.png');
+}
+
+/* Custom styling for the home page - with dark mode support */
+.md-typeset h1 {
+  font-weight: 700;
+  color: var(--zsoftly-primary);
+}
+
+[data-md-color-scheme="slate"] .md-typeset h1 {
+  color: var(--zsoftly-accent);
+}
+
+/* Dark mode fixes for links and text */
+[data-md-color-scheme="slate"] a {
+  color: var(--md-typeset-a-color);
+}
+
+[data-md-color-scheme="slate"] .md-typeset {
+  color: var(--md-default-fg-color);
+}
+
+/* Card styling - with ZSoftly brand colors */
+.grid.cards > ul {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0;
+  list-style: none;
+}
+
+.grid.cards > ul > li {
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.2rem;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  transition: border .25s,box-shadow .25s;
+  box-shadow: 0 .2rem .5rem rgba(0,0,0,.05), 0 0 .05rem rgba(0,0,0,.1);
+}
+
+.grid.cards > ul > li:hover {
+  border-color: var(--zsoftly-primary);
+  box-shadow: 0 .4rem 1rem rgba(0, 25, 138, 0.1), 0 0 .1rem rgba(0, 25, 138, 0.2);
+}
+
+[data-md-color-scheme="slate"] .grid.cards > ul > li:hover {
+  border-color: var(--zsoftly-secondary);
+  box-shadow: 0 .4rem 1rem rgba(218, 229, 250, 0.1), 0 0 .1rem rgba(218, 229, 250, 0.2);
+}
+
+.grid.cards > ul > li > .card-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  padding: 1rem;
+}
+
+/* Better form styling */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--zsoftly-primary);
+}
+
+[data-md-color-scheme="slate"] .form-group label {
+  color: var(--zsoftly-secondary);
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid var(--md-default-fg-color--lightest);
+  border-radius: 0.2rem;
+  transition: border-color .25s, box-shadow .25s;
+  font-size: 0.9rem;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  border-color: var(--md-primary-fg-color);
+  outline: none;
+  box-shadow: 0 0 0 0.2rem rgba(26, 35, 126, 0.1);
+}
+
+button[type="submit"] {
+  background-color: var(--md-primary-fg-color);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 0.2rem;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color .25s, transform .25s;
+}
+
+button[type="submit"]:hover {
+  background-color: var(--md-primary-fg-color--light);
+  transform: translateY(-1px);
+}
+
+/* Button styling with brand colors */
+.md-button--primary {
+  background-color: var(--zsoftly-primary);
+  color: var(--zsoftly-accent);
+  border: 2px solid var(--zsoftly-primary);
+}
+
+.md-button--primary:hover {
+  background-color: transparent;
+  color: var(--zsoftly-primary);
+}
+
+[data-md-color-scheme="slate"] .md-button--primary {
+  background-color: var(--zsoftly-primary);
+  color: var(--zsoftly-accent);
+  border-color: var(--zsoftly-primary);
+}
+
+[data-md-color-scheme="slate"] .md-button--primary:hover {
+  background-color: transparent;
+  color: var(--zsoftly-secondary);
+  border-color: var(--zsoftly-secondary);
+}
+
+/* Footer customization */
+.md-footer-meta__inner {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Custom image styling */
+.company-logo {
+  max-width: 200px;
+  margin: 2rem auto;
+  display: block;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 76.1875em) {
+  .md-header__button.md-logo img {
+    height: 1.8rem;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  .grid.cards > ul {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

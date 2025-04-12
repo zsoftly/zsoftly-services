@@ -1,0 +1,92 @@
+site_name: ZSoftly Technologies Inc.
+site_description: Enterprise-Grade IT Solutions for Mid-Market Businesses
+site_url: https://zsoftly.github.io/zsoftly-services/
+repo_url: https://github.com/zsoftly/zsoftly-services
+repo_name: zsoftly/zsoftly-services
+
+theme:
+  name: material
+  logo: assets/images/217183861/Logo%20Files/png/Color%20logo%20-%20no%20background.png
+  favicon: assets/images/217183861/Logo%20Files/Favicons/browser.png
+  palette:
+    # Palette toggle for light mode
+    - media: "(prefers-color-scheme: light)"
+      scheme: default
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+      
+    # Palette toggle for dark mode
+    - media: "(prefers-color-scheme: dark)"
+      scheme: slate
+      primary: custom
+      accent: custom
+      toggle:
+        icon: material/brightness-4
+        name: Switch to light mode
+  features:
+    - navigation.instant
+    - navigation.tracking
+    - navigation.sections
+    - navigation.expand
+    - navigation.tabs
+    - navigation.top
+    - search.highlight
+    - search.share
+    - content.code.copy
+    - content.tabs.link
+  font:
+    text: Roboto
+    code: Roboto Mono
+  icon:
+    repo: fontawesome/brands/github
+    logo: fontawesome/solid/server
+
+extra_css:
+  - stylesheets/extra.css
+
+markdown_extensions:
+  - admonition
+  - pymdownx.details
+  - pymdownx.superfences
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - attr_list
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
+      options:
+        custom_icons:
+          - overrides/.icons
+
+plugins:
+  - search
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/zsoftly
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/zsoftly-technologies
+  
+  # Add company logo for footer
+  generator: false  # Hide "Made with Material for MkDocs" text
+
+nav:
+  - Home: index.md
+  - Services:
+    - Security Services: security-services.md
+    - DevOps Services: devops-services.md
+    - Cloud Migration: cloud-migration.md
+    - Digital Transformation: digital-transformation.md
+  - Contact: contact.md
+  - Privacy Policy: privacy-policy.md
