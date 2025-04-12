@@ -22,12 +22,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
           
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v5
         with:
           python-version: '3.x'
           
@@ -64,7 +64,7 @@ jobs:
         run: mkdocs build
         
       - name: Upload artifact
-        uses: actions/upload-pages-artifact@v1
+        uses: actions/upload-pages-artifact@v3
         with:
           path: ./site
           
@@ -81,11 +81,11 @@ jobs:
         id: preparation
         run: |
           echo "Preparing documentation for deployment"
-          echo "::set-output name=ready::true"
-          echo "::set-output name=preview_url::https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
+          echo "ready=true" >> $GITHUB_OUTPUT
+          echo "preview_url=https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}" >> $GITHUB_OUTPUT
           
       - name: Notify preparation complete
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -106,7 +106,7 @@ jobs:
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
-        uses: actions/deploy-pages@v2
+        uses: actions/deploy-pages@v3
         
       - name: Verify deployment
         run: |
@@ -133,7 +133,7 @@ jobs:
         
       - name: Send notification on success
         if: success()
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
@@ -146,7 +146,7 @@ jobs:
       
       - name: Send notification on failure
         if: failure()
-        uses: actions/github-script@v6
+        uses: actions/github-script@v7
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           script: |
