@@ -8,12 +8,15 @@ This repository houses Markdown documentation for ZSoftly's service portfolio. T
 
 ## CI/CD Pipeline
 
-The documentation site is automatically built and deployed using GitHub Actions workflow:
+The documentation site is built and deployed using a multi-stage GitHub Actions workflow:
 
 - **Trigger**: Automatically on push to the `main` branch or manually via workflow dispatch
-- **Build**: Using MkDocs with the Material theme
-- **Deploy**: To GitHub Pages with proper permissions and verification
+- **Build**: First job that builds the documentation using MkDocs with the Material theme
+- **Prepare**: Second job that prepares the deployment and creates a staging environment
+- **Deploy**: Final job with manual approval requirement for deploying to GitHub Pages
 - **Features**: Dark/light theme switching, responsive design, search functionality
+
+The deployment process requires manual approval through GitHub's environment protection feature, giving you control over when documentation is published to production.
 
 ## Local Development Setup
 
