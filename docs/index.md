@@ -1,12 +1,12 @@
-# ZSoftly Technologies Inc.
+# ZSoftly
 
 <div class="text-center">
-  <img src="assets/images/217183861/Logo%20Files/png/Color%20logo%20-%20no%20background.png" alt="ZSoftly Technologies Logo" class="company-logo">
+  <img src="assets/images/217183861/Logo%20Files/png/Color%20logo%20with%20background.png" alt="ZSoftly Logo" class="company-logo">
 </div>
 
 ## Enterprise-Grade IT Solutions for Mid-Market Businesses
 
-ZSoftly Technologies delivers comprehensive IT solutions tailored specifically for mid-market businesses. Our services bridge the gap between enterprise capabilities and mid-market budgets, offering you the technological advantages of larger competitors without the excessive costs.
+ZSoftly delivers comprehensive IT solutions tailored specifically for mid-market businesses. Our services bridge the gap between enterprise capabilities and mid-market budgets, offering you the technological advantages of larger competitors without the excessive costs.
 
 ## Our Service Portfolio
 
@@ -97,7 +97,7 @@ Contact us to discuss how we can help you leverage these powerful technologies w
 
 ## AWS Partnership
 
-As an AWS Partner, ZSoftly Technologies leverages the full power of Amazon Web Services to deliver secure, scalable, and cost-effective solutions. Our team includes AWS-certified professionals with deep expertise in AWS technologies and best practices.
+As an AWS Partner, ZSoftly leverages the full power of Amazon Web Services to deliver secure, scalable, and cost-effective solutions. Our team includes AWS-certified professionals with deep expertise in AWS technologies and best practices.
 
 We are actively working toward achieving AWS Advanced Tier Partner status by September 2025, demonstrating our commitment to excellence in AWS implementation and support. This journey involves rigorous compliance requirements and advanced certifications that further enhance our ability to deliver exceptional AWS solutions.
 
@@ -121,4 +121,4 @@ Ready to transform your technology infrastructure? Contact us today to schedule 
 
 ---
 
-© 2025 ZSoftly Technologies Inc. All rights reserved.
+© 2025 ZSoftly. All rights reserved.

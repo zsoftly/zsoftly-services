@@ -1,10 +1,10 @@
 # Thank You for Contacting Us
 
-![ZSoftly Technologies](assets/images/fullColorWithPadding.jpg){: .company-logo}
+![ZSoftly](assets/images/217183861/Logo%20Files/png/Color%20logo%20with%20background.png){: .company-logo}
 
 ## Your Message Has Been Received
 
-Thank you for reaching out to ZSoftly Technologies. We've successfully received your inquiry and a member of our team will be in touch with you shortly.
+Thank you for reaching out to ZSoftly. We've successfully received your inquiry and a member of our team will be in touch with you shortly.
 
 **What happens next?**
 

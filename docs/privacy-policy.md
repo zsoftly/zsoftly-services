@@ -4,7 +4,7 @@
 
 ## Introduction
 
-At ZSoftly Technologies Inc., we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you engage with our IT services, website, or other digital assets. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access our services.
+At ZSoftly, we take your privacy seriously. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you engage with our IT services, website, or other digital assets. Please read this privacy policy carefully. If you do not agree with the terms of this privacy policy, please do not access our services.
 
 ## Information We Collect
 
@@ -81,8 +81,8 @@ If you have questions about this privacy policy or our practices, please contact
 
 - **Email**: privacy@zsoftly.com
 - **Phone**: +1 (613) 979-1065
-- **Mail**: ZSoftly Technologies Inc., 116 Albert Street, Suite 300, Ottawa, Ontario K1P 5G3
+- **Mail**: ZSoftly, 116 Albert Street, Suite 300, Ottawa, Ontario K1P 5G3
 
 ---
 
-© 2025 ZSoftly Technologies Inc. All rights reserved.
+© 2025 ZSoftly. All rights reserved.

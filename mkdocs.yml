@@ -1,4 +1,4 @@
-site_name: ZSoftly Technologies Inc.
+site_name: ZSoftly
 site_description: Enterprise-Grade IT Solutions for Mid-Market Businesses
 site_url: https://zsoftly.github.io/zsoftly-services/
 repo_url: https://github.com/zsoftly/zsoftly-services
@@ -6,7 +6,7 @@ repo_name: zsoftly/zsoftly-services
 
 theme:
   name: material
-  logo: assets/images/217183861/Logo%20Files/png/Color%20logo%20-%20no%20background.png
+  logo: assets/images/217183861/217183861_padded_logo.png
   favicon: assets/images/217183861/Logo%20Files/Favicons/browser.png
   palette:
     # Palette toggle for light mode

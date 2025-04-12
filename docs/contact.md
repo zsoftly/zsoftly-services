@@ -1,4 +1,4 @@
-# Contact ZSoftly Technologies
+# Contact ZSoftly
 
 ## Get in Touch
 
@@ -15,7 +15,7 @@ We're here to help with your IT service needs. Please reach out using any of the
     +1 (613) 979-1065
 
 -   [:fontawesome-brands-linkedin:{ .icon } **LinkedIn**](https://www.linkedin.com/company/zsoftly-technologies)  
-    [ZSoftly Technologies](https://www.linkedin.com/company/zsoftly-technologies)
+    [ZSoftly](https://www.linkedin.com/company/zsoftly-technologies)
 
 -   [:fontawesome-solid-building:{ .icon } **Address**](https://maps.google.com/?q=116+Albert+Street,+Suite+300+Ottawa,+Ontario+K1P+5G3)  
     116 Albert Street,  
