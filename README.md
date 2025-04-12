@@ -1,56 +1,92 @@
-# ZSoftly Technologies Inc.
-## Enterprise-Grade IT Solutions for Mid-Market Businesses
+# ZSoftly Documentation
 
-ZSoftly Technologies Inc. (ZTI) is a Canadian IT Professional Services company delivering enterprise-grade technology solutions to small and medium-sized businesses. Based in Ottawa, Ontario, we serve clients across Canada with specialized expertise in cloud computing, cybersecurity, DevOps, and digital transformation.
+This repository contains the official documentation for ZSoftly services, deployed using GitHub Pages with MkDocs Material theme.
 
-## Our Mission
+## About This Repository
 
-To deliver enterprise-grade IT services to small and medium-sized businesses that have traditionally been underserved by large IT service providers, by providing high-quality, customized technology solutions that drive security, efficiency, and growth.
+This repository houses Markdown documentation for ZSoftly's service portfolio. The documentation is automatically built and deployed to GitHub Pages using a CI/CD pipeline implemented with GitHub Actions.
 
-## Service Portfolio
+## CI/CD Pipeline
 
-ZSoftly delivers comprehensive IT solutions across four key pillars:
+The documentation site is built and deployed using a multi-stage GitHub Actions workflow:
 
-1. [Security Services](security-services.md)
-2. [DevOps Services](devops-services.md)
-3. [Cloud Migration](cloud-migration.md)
-4. [Digital Transformation](digital-transformation.md)
+- **Trigger**: Automatically on push to the `main` branch or manually via workflow dispatch
+- **Build**: First job that builds the documentation using MkDocs with the Material theme
+- **Prepare**: Second job that prepares the deployment and creates a staging environment
+- **Deploy**: Final job with manual approval requirement for deploying to GitHub Pages
+- **Features**: Dark/light theme switching, responsive design, search functionality
 
-## Open Source Expertise
+The deployment process requires manual approval through GitHub's environment protection feature, giving you control over when documentation is published to production.
 
-ZSoftly provides expertise in implementing and managing a wide range of open source tools. We help organizations successfully adopt, integrate, and maintain solutions such as:
+## Local Development Setup
 
-- **Identity & Access Management**: Keycloak, Authentik, JumpCloud (Official Partner)
-- **DevOps Tools**: Gitea, Harbor Registry
-- **Security & Monitoring**: Wazuh, SigNoz, Prisma Cloud (Official Partner)
-- **Observability**: Datadog, Traefik
-- **Compliance Automation**: Vanta (Official Partner)
+### Prerequisites
 
-Contact us to discuss how we can help you leverage these powerful technologies within your organization.
+- Python 3.x
+- Git
 
-## AWS Partnership
+### Installation
 
-As an AWS Partner, ZSoftly Technologies leverages the full power of Amazon Web Services to deliver secure, scalable, and cost-effective solutions. Our team includes AWS-certified professionals with deep expertise in AWS technologies and best practices.
+1. Clone this repository:
+   ```bash
+   git clone https://github.com/zsoftly/zsoftly-services.git
+   cd zsoftly-services
+   ```
 
-We are actively working toward achieving AWS Advanced Tier Partner status by September 2025, demonstrating our commitment to excellence in AWS implementation and support. This journey involves rigorous compliance requirements and advanced certifications that further enhance our ability to deliver exceptional AWS solutions.
+2. Install the required packages:
+   ```bash
+   pip install mkdocs-material
+   ```
 
-1. **Team Expertise**: Our team brings diverse, specialized experience from enterprise environments
-2. **Canadian-Based Support**: Local presence and understanding of Canadian business needs
-3. **SMB Focus**: Specialized in right-sizing enterprise solutions for mid-market companies
-4. **Compliance Expertise**: Deep understanding of regulatory requirements for Canadian businesses
-5. **Enterprise-Grade, Cost-Effective Solutions**: Delivering high-quality services at accessible price points
-6. **Strategic Partnerships**: Official partnerships with industry leaders including Vanta, Palo Alto's Prisma Cloud, and JumpCloud
+3. Start the local development server:
+   ```bash
+   mkdocs serve
+   ```
 
-## Get Started
+4. Open your browser and visit `http://127.0.0.1:8000/` to view the documentation site.
 
-Ready to transform your technology infrastructure? Contact us today to schedule a consultation.
+### Troubleshooting
 
-- **Website**: [https://zsoftly.com](https://zsoftly.com)
+If you encounter issues with the paths not showing:
+
+```bash
+# If mkdocs is installed in ~/.local/bin
+export PATH="$HOME/.local/bin:$PATH"
+
+# Or run with the full path
+~/.local/bin/mkdocs serve
+```
+
+## Adding or Updating Content
+
+1. Create or edit Markdown files in the `docs/` directory
+2. Preview changes locally using `mkdocs serve`
+3. Commit and push changes to the `main` branch
+4. GitHub Actions will automatically build and deploy the updated site
+
+## Folder Structure
+
+- `mkdocs.yml`: Configuration file for MkDocs
+- `docs/`: Main documentation directory containing all Markdown files
+  - `index.md`: Home page content
+  - `security-services.md`, `devops-services.md`, etc.: Service-specific documentation
+  - `assets/`: Contains images and brand resources
+  - `stylesheets/`: Contains CSS customizations
+
+## Technology Stack
+
+- **MkDocs**: Documentation site generator
+- **Material for MkDocs**: Theme for professional documentation
+- **GitHub Actions**: CI/CD pipeline automation
+- **GitHub Pages**: Hosting platform
+
+## Contact
+
+For questions or issues related to this documentation repository, please contact:
+
 - **Email**: info@zsoftly.com
-- **Phone**: +1 (613) 979-1065
-- **LinkedIn**: [ZSoftly Technologies Inc.](https://linkedin.com/company/zsoftly)
 - **GitHub**: [ZSoftly](https://github.com/zsoftly)
 
 ---
 
-© 2025 ZSoftly Technologies Inc. All rights reserved.
+© 2025 ZSoftly. All rights reserved.
