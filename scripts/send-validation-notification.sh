@@ -31,6 +31,15 @@ fi
 # Get the logo URL - using color logo with no background
 LOGO_URL="https://raw.githubusercontent.com/${REPO}/main/docs/assets/images/217183861/Logo%20Files/png/Color%20logo%20-%20no%20background.png"
 
+# Create a unique thread key based on the branch or PR
+if [ -z "$PR_NUMBER" ]; then
+  # For branch push validations
+  THREAD_KEY="${REPO}-branch-$(echo $GITHUB_REF | cut -d/ -f3-)"
+else
+  # For PR validations
+  THREAD_KEY="${REPO}-pr-${PR_NUMBER}"
+fi
+
 # Create Google Chat card format JSON for validation results
 if [ -z "$PR_NUMBER" ]; then
   # For branch push validations
@@ -69,7 +78,10 @@ if [ -z "$PR_NUMBER" ]; then
         }
       ]
     }
-  ]
+  ],
+  "thread": {
+    "threadKey": "${THREAD_KEY}"
+  }
 }
 EOF
 )
@@ -135,7 +147,10 @@ else
         }
       ]
     }
-  ]
+  ],
+  "thread": {
+    "threadKey": "${THREAD_KEY}"
+  }
 }
 EOF
 )
