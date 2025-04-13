@@ -8,58 +8,24 @@ on:
   pull_request:
     branches: 
       - '*'  # Run on all pull requests
+    types: [opened, synchronize, reopened]
 
 permissions:
   contents: read
   issues: write
   pull-requests: write
 
-# Concurrency configuration that properly handles both PR and push events
+# Simple concurrency configuration: one run per branch or PR
 concurrency:
-  # Use different group keys for PR and push events
-  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  # Skip validation on push events if there's an open PR for this branch
-  check-if-pr-exists:
-    if: github.event_name == 'push'
+  validate-and-notify:
     runs-on: ubuntu-latest
-    outputs:
-      has_pr: ${{ steps.check_pr.outputs.has_pr }}
-    steps:
-      - name: Check for open PRs for this branch
-        id: check_pr
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const branch = context.ref.replace('refs/heads/', '');
-            console.log(`Checking for open PRs for branch: ${branch}`);
-            
-            const prs = await github.rest.pulls.list({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              state: 'open',
-              head: `${context.repo.owner}:${branch}`
-            });
-            
-            const hasPR = prs.data.length > 0;
-            console.log(`Branch has open PR: ${hasPR}`);
-            
-            if (hasPR) {
-              console.log(`Skipping validation for push event as PR #${prs.data[0].number} exists`);
-            }
-            
-            core.setOutput('has_pr', hasPR.toString());
-
-  setup:
-    needs: [check-if-pr-exists]
-    # Skip if this is a push event and there's an open PR for this branch
-    if: ${{ github.event_name == 'pull_request' || needs.check-if-pr-exists.outputs.has_pr != 'true' }}
-    runs-on: ubuntu-latest
-    outputs:
-      docs_ready: ${{ steps.setup_docs.outputs.result }}
+    # Skip push events that are associated with a PR
+    # This avoids duplicate runs when pushing to a PR branch
+    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, 'Merge pull request') }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -70,7 +36,6 @@ jobs:
           python-version: '3.x'
           
       - name: Setup documentation files
-        id: setup_docs
         run: |
           mkdir -p docs/stylesheets
           # Only copy files if they don't exist in docs/ already
@@ -95,19 +60,6 @@ jobs:
           if [ -f "docs/README.md" ]; then
             rm -f docs/README.md
           fi
-          echo "result=true" >> $GITHUB_OUTPUT
-
-  validate-and-notify:
-    needs: setup
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-        
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: '3.x'
           
       - name: Install dependencies
         run: |
