@@ -69,13 +69,11 @@ jobs:
           path: ./site
           
   prepare-deployment:
-    environment:
-      name: staging
-      url: ${{ steps.preparation.outputs.preview_url }}
     runs-on: ubuntu-latest
     needs: build
     outputs:
       deployment_ready: ${{ steps.preparation.outputs.ready }}
+      preview_url: ${{ steps.preparation.outputs.preview_url }}
     steps:
       - name: Prepare for deployment
         id: preparation
@@ -87,8 +85,9 @@ jobs:
       - name: Send Google Chat notification - Ready for Deployment
         if: github.ref == 'refs/heads/main'
         run: |
-          curl -X POST -H 'Content-Type: application/json' \
-          -d '{"text": "🔄 **Documentation Build Complete**\n\nThe ZSoftly documentation has been built successfully and is ready for manual deployment.\n\n**Repository**: ${{ github.repository }}\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\n\nPlease review and approve the deployment on the GitHub Actions page."}' \
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -d "{\"text\": \"🔄 **Documentation Build Complete**\\n\\nThe ZSoftly documentation has been built successfully and is ready for manual deployment.\\n\\n**Repository**: ${{ github.repository }}\\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\\n\\nPlease review and approve the deployment on the GitHub Actions page.\"}" \
           ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
       
       - name: Notify preparation complete (PR only)
@@ -106,9 +105,6 @@ jobs:
   
   deploy:
     name: Deploy to GitHub Pages
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     needs: prepare-deployment
     steps:
@@ -142,15 +138,17 @@ jobs:
       - name: Send Google Chat notification on success
         if: success() && github.ref == 'refs/heads/main'
         run: |
-          curl -X POST -H 'Content-Type: application/json' \
-          -d '{"text": "✅ **Documentation Deployment Successful**\n\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\n\n**Repository**: ${{ github.repository }}\n**URL**: ${{ steps.deployment.outputs.page_url }}\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"}' \
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -d "{\"text\": \"✅ **Documentation Deployment Successful**\\n\\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\\n\\n**Repository**: ${{ github.repository }}\\n**URL**: ${{ steps.deployment.outputs.page_url }}\\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
           ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
         
       - name: Send Google Chat notification on failure
         if: failure() && github.ref == 'refs/heads/main'
         run: |
-          curl -X POST -H 'Content-Type: application/json' \
-          -d '{"text": "⚠️ **Documentation Deployment Failed**\n\nThe ZSoftly documentation deployment to GitHub Pages has failed.\n\n**Repository**: ${{ github.repository }}\n**Action**: [View workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"}' \
+          curl -X POST \
+          -H "Content-Type: application/json" \
+          -d "{\"text\": \"⚠️ **Documentation Deployment Failed**\\n\\nThe ZSoftly documentation deployment to GitHub Pages has failed.\\n\\n**Repository**: ${{ github.repository }}\\n**Action**: [View workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
           ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
         
       - name: Send notification on success (PR only)
