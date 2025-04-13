@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script to send rich notifications about documentation deployments to Google Chat
-# Usage: ./scripts/send-notification.sh <webhook_url> <repo> <run_id>
+# Script to send focused notifications about documentation validation to Google Chat
+# Usage: ./scripts/send-validation-notification.sh <webhook_url> <repo> <run_id> <pr_number> <pr_title> <pr_author>
 
 # Exit on any error
 set -e
@@ -9,6 +9,9 @@ set -e
 WEBHOOK_URL="$1"
 REPO="$2"
 RUN_ID="$3"
+PR_NUMBER="$4"
+PR_TITLE="$5"
+PR_AUTHOR="$6"
 
 if [ -z "$WEBHOOK_URL" ]; then
   echo "❌ Error: Webhook URL is required"
@@ -25,89 +28,42 @@ if [ -z "$RUN_ID" ]; then
   exit 1
 fi
 
-# Extract organization and repository name
-IFS='/' read -r ORG REPO_NAME <<< "$REPO"
-
-# Setup URLs
-ACTIONS_URL="https://github.com/${REPO}/actions"
-GH_PAGES_URL="https://${ORG}.github.io/${REPO_NAME}/"
-CURRENT_RUN_URL="${ACTIONS_URL}/runs/${RUN_ID}"
-PAGES_WORKFLOW_URL="${ACTIONS_URL}/workflows/pages/pages-build-deployment"
-
 # Get the logo URL - using color logo with no background
 LOGO_URL="https://raw.githubusercontent.com/${REPO}/main/docs/assets/images/217183861/Logo%20Files/png/Color%20logo%20-%20no%20background.png"
 
-# Create Google Chat card format JSON
-JSON_PAYLOAD=$(cat <<EOF
+# Create Google Chat card format JSON for validation results
+if [ -z "$PR_NUMBER" ]; then
+  # For branch push validations
+  JSON_PAYLOAD=$(cat <<EOF
 {
   "cards": [
     {
       "header": {
-        "title": "🚀 Documentation Deployment Process",
+        "title": "📋 Documentation Validation",
         "subtitle": "${REPO}",
         "imageUrl": "${LOGO_URL}"
       },
       "sections": [
         {
-          "header": "Step 1: Documentation Build & Push ✅",
           "widgets": [
             {
               "textParagraph": {
-                "text": "The documentation has been built and pushed to the gh-pages branch."
+                "text": "✅ <b>Build Successful</b>: Documentation compilation and validation has passed on branch push."
               }
             },
             {
               "buttons": [
                 {
                   "textButton": {
-                    "text": "View Build Details",
+                    "text": "View Workflow Run",
                     "onClick": {
                       "openLink": {
-                        "url": "${CURRENT_RUN_URL}"
+                        "url": "https://github.com/${REPO}/actions/runs/${RUN_ID}"
                       }
                     }
                   }
                 }
               ]
-            }
-          ]
-        },
-        {
-          "header": "Step 2: GitHub Pages Deployment ⏳",
-          "widgets": [
-            {
-              "textParagraph": {
-                "text": "The GitHub Pages workflow has been triggered and will deploy shortly."
-              }
-            },
-            {
-              "buttons": [
-                {
-                  "textButton": {
-                    "text": "Check Pages Workflow",
-                    "onClick": {
-                      "openLink": {
-                        "url": "${PAGES_WORKFLOW_URL}"
-                      }
-                    }
-                  }
-                },
-                {
-                  "textButton": {
-                    "text": "View Documentation",
-                    "onClick": {
-                      "openLink": {
-                        "url": "${GH_PAGES_URL}"
-                      }
-                    }
-                  }
-                }
-              ]
-            },
-            {
-              "textParagraph": {
-                "text": "⚠️ Please verify the GitHub Pages deployment completed successfully"
-              }
             }
           ]
         }
@@ -117,10 +73,77 @@ JSON_PAYLOAD=$(cat <<EOF
 }
 EOF
 )
+else
+  # For PR validations
+  JSON_PAYLOAD=$(cat <<EOF
+{
+  "cards": [
+    {
+      "header": {
+        "title": "📋 Documentation Validation",
+        "subtitle": "${REPO}",
+        "imageUrl": "${LOGO_URL}"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "textParagraph": {
+                "text": "✅ <b>PR Ready for Review</b>: Documentation validation has passed all checks."
+              }
+            },
+            {
+              "textParagraph": {
+                "text": "<b>Pull Request:</b> #${PR_NUMBER}: ${PR_TITLE}"
+              }
+            },
+            {
+              "textParagraph": {
+                "text": "<b>Author:</b> ${PR_AUTHOR}"
+              }
+            },
+            {
+              "textParagraph": {
+                "text": "<b>Checks Passed:</b> MkDocs build, internal links, image references"
+              }
+            },
+            {
+              "buttons": [
+                {
+                  "textButton": {
+                    "text": "Review PR",
+                    "onClick": {
+                      "openLink": {
+                        "url": "https://github.com/${REPO}/pull/${PR_NUMBER}"
+                      }
+                    }
+                  }
+                },
+                {
+                  "textButton": {
+                    "text": "View Workflow",
+                    "onClick": {
+                      "openLink": {
+                        "url": "https://github.com/${REPO}/actions/runs/${RUN_ID}"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
+EOF
+)
+fi
 
 # Send the notification to Google Chat
 curl -s -X POST -H "Content-Type: application/json" \
   -d "$JSON_PAYLOAD" \
   "$WEBHOOK_URL"
 
-echo "✅ Notification sent successfully"
+echo "✅ Validation notification sent successfully"

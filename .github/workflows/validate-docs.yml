@@ -55,7 +55,7 @@ jobs:
           fi
           echo "::set-output name=result::true"
 
-  validate:
+  validate-and-notify:
     needs: setup
     runs-on: ubuntu-latest
     steps:
@@ -73,18 +73,12 @@ jobs:
           pip install mkdocs-material
           
       - name: Check for broken links
+        id: validation
         run: |
           echo "Checking for broken internal links and image references..."
           mkdocs build --strict
           echo "✅ Documentation validation passed"
-  
-  comment-pr:
-    needs: validate
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
+          
       # Only add PR comment if this is a pull request  
       - name: Comment on PR
         if: github.event_name == 'pull_request'
@@ -105,6 +99,8 @@ jobs:
             \`\`\`bash
             mkdocs serve
             \`\`\`
+            
+            **This PR is ready for review and can be merged.**
             `;
             
             github.rest.issues.createComment({
