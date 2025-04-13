@@ -1,9 +1,6 @@
 name: Deploy Documentation
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
 
 permissions:
@@ -35,42 +32,12 @@ jobs:
       - name: Build documentation
         run: mkdocs build
 
-      - name: Debug site structure
-        run: |
-          echo "Site directory contents:"
-          ls -la ./site
-          echo "Top-level files:"
-          find ./site -maxdepth 1 -type f -name "*.html" | sort
-          echo "Directory structure:"
-          find ./site -type d | sort
-
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./site
           force_orphan: true
-
-      - name: Verify deployment (short retry)
-        run: |
-          ATTEMPTS=3
-          INTERVAL=10
-          EXPECTED_URL="https://zsoftly.github.io/zsoftly-services/"
-          echo "Checking if deployment is live at $EXPECTED_URL"
-          DEPLOYMENT_STATUS="timeout"
-
-          for i in $(seq 1 $ATTEMPTS); do
-            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$EXPECTED_URL")
-            if [ "$STATUS" = "200" ]; then
-              echo "✅ Site is live (HTTP $STATUS)"
-              DEPLOYMENT_STATUS="success"
-              break
-            fi
-            echo "Attempt $i/$ATTEMPTS failed (HTTP $STATUS). Retrying in $INTERVALs..."
-            sleep $INTERVAL
-          done
-
-          echo "DEPLOYMENT_STATUS=$DEPLOYMENT_STATUS" >> $GITHUB_ENV
 
       - name: Send Google Chat notification
         if: github.ref == 'refs/heads/main'
@@ -89,11 +56,6 @@ jobs:
             exit 0
           fi
 
-          DEPLOY_MESSAGE="has been deployed to GitHub Pages"
-          if [ "$DEPLOYMENT_STATUS" = "timeout" ]; then
-            DEPLOY_MESSAGE="was deployed, but verification timed out"
-          fi
-
           curl -s -X POST -H "Content-Type: application/json" \
-            -d "{\"text\": \"📘 **Documentation Update**\n\nZSoftly documentation $DEPLOY_MESSAGE.\n\n**Repo**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            -d "{\"text\": \"📘 **Documentation Update**\n\nZSoftly documentation has been deployed to GitHub Pages.\n\n**Repo**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
             "$WEBHOOK_URL"
