@@ -33,6 +33,7 @@ jobs:
         run: mkdocs build
 
       - name: Deploy to gh-pages branch
+        id: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -55,7 +56,9 @@ jobs:
             echo "❌ Failed to decode the webhook URL."
             exit 0
           fi
-
-          curl -s -X POST -H "Content-Type: application/json" \
-            -d "{\"text\": \"📘 **Documentation Update**\n\nZSoftly documentation has been deployed to GitHub Pages.\n\n**Repo**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
-            "$WEBHOOK_URL"
+          
+          # Make sure the script is executable
+          chmod +x ./scripts/send-notification.sh
+          
+          # Send the notification using the script
+          ./scripts/send-notification.sh "$WEBHOOK_URL" "${{ github.repository }}" "${{ github.run_id }}"
