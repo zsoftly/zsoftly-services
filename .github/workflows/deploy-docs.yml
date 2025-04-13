@@ -127,25 +127,27 @@ jobs:
             sleep $INTERVAL
           done
 
-      - name: Send Google Chat notification on success
-        if: success() && github.ref == 'refs/heads/main'
-        run: |
-          if [ -n "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" ]; then
-            # Test the webhook first
-            TEST_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            -H "Content-Type: application/json" \
-            -d "{\"text\": \"Webhook test\"}" \
-            ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }})
-            
-            if [ "$TEST_RESPONSE" = "200" ]; then
-              curl -X POST \
-              -H "Content-Type: application/json" \
-              -d "{\"text\": \"✅ **Documentation Deployment Successful**\\n\\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\\n\\n**Repository**: ${{ github.repository }}\\n**URL**: https://zsoftly.github.io/zsoftly-services/\\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
-              ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
-              echo "✅ Google Chat notification sent"
+          - name: Send Google Chat notification on success
+          if: success() && github.ref == 'refs/heads/main'
+          env:
+            WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+          run: |
+            if [ -n "$WEBHOOK_URL" ]; then
+              # Test the webhook with simpler approach
+              TEST_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" \
+                -H "Content-Type: application/json" \
+                -d '{"text": "Webhook test"}' \
+                "$WEBHOOK_URL")
+              
+              if [ "$TEST_RESPONSE" = "200" ]; then
+                curl -X POST \
+                  -H "Content-Type: application/json" \
+                  -d '{"text": "✅ **Documentation Deployment Successful**\n\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\n\n**Repository**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"}' \
+                  "$WEBHOOK_URL"
+                echo "✅ Google Chat notification sent"
+              else
+                echo "❌ Google Chat webhook test failed with status $TEST_RESPONSE"
+              fi
             else
-              echo "❌ Google Chat webhook test failed with status $TEST_RESPONSE"
+              echo "ℹ️ No Google Chat webhook URL provided, skipping notification"
             fi
-          else
-            echo "ℹ️ No Google Chat webhook URL provided, skipping notification"
-          fi
