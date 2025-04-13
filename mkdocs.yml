@@ -3,6 +3,7 @@ site_description: Managed and Co-Managed Cloud, DevOps, and Security for Growing
 site_url: https://zsoftly.github.io/zsoftly-services/
 repo_url: https://github.com/zsoftly/zsoftly-services
 repo_name: zsoftly/zsoftly-services
+use_directory_urls: false
 
 theme:
   name: material
