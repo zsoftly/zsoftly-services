@@ -57,30 +57,12 @@ JSON_PAYLOAD=$(cat <<EOF
           "widgets": [
             {
               "textParagraph": {
-                "text": "Documentation has been built and pushed to the gh-pages branch."
+                "text": "✅ Documentation has been successfully built and deployed to the gh-pages branch."
               }
             },
             {
-              "buttons": [
-                {
-                  "textButton": {
-                    "text": "View Build",
-                    "onClick": {
-                      "openLink": {
-                        "url": "${CURRENT_RUN_URL}"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        },
-        {
-          "widgets": [
-            {
               "textParagraph": {
-                "text": "GitHub Pages deployment is in progress. When complete, you can view the documentation at:"
+                "text": "The changes will be visible on GitHub Pages shortly."
               }
             },
             {
@@ -97,10 +79,10 @@ JSON_PAYLOAD=$(cat <<EOF
                 },
                 {
                   "textButton": {
-                    "text": "Check Pages Workflow",
+                    "text": "View Build Job",
                     "onClick": {
                       "openLink": {
-                        "url": "${PAGES_WORKFLOW_URL}"
+                        "url": "${CURRENT_RUN_URL}"
                       }
                     }
                   }
