@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: "pages"
@@ -34,25 +32,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs-material mkdocs-glightbox mkdocs-minify-plugin
 
-      # Ensure gh-pages branch exists
-      - name: Create gh-pages branch if needed
-        run: |
-          if ! git ls-remote --heads origin gh-pages; then
-            git checkout -b gh-pages
-            git push -u origin gh-pages
-            git checkout -
-            echo "Created gh-pages branch"
-          else
-            echo "gh-pages branch already exists"
-          fi
-
-      - name: Setup Pages
-        id: pages
-        uses: actions/configure-pages@v4
-
       - name: Build documentation
         run: mkdocs build
-        
+
       - name: Debug site structure
         run: |
           echo "Site directory contents:"
@@ -62,12 +44,6 @@ jobs:
           echo "Directory structure:"
           find ./site -type d | sort
 
-      - name: Upload artifact
-        uses: actions/upload-pages-artifact@v3
-        with:
-          path: ./site
-
-      # Deploy to gh-pages branch
       - name: Deploy to gh-pages branch
         uses: peaceiris/actions-gh-pages@v3
         with:
@@ -75,24 +51,9 @@ jobs:
           publish_dir: ./site
           force_orphan: true
 
-      # Standard GitHub Pages deployment
-      - name: Deploy to GitHub Pages
-        id: deployment
-        uses: actions/deploy-pages@v3
-        continue-on-error: true
-
-      - name: Check deployment status
+      - name: Verify deployment
         run: |
-          if [ "${{ steps.deployment.outcome }}" == "success" ]; then
-            echo "✅ Standard GitHub Pages deployment succeeded"
-          else
-            echo "⚠️ Standard GitHub Pages deployment failed, but content was deployed to gh-pages branch"
-            echo "Your site should still be accessible at GitHub Pages URL"
-          fi
-
-      - name: Verify deployment exists
-        run: |
-          TIMEOUT=600  # Increased to 10 minutes
+          TIMEOUT=600
           INTERVAL=20
           EXPECTED_URL="https://zsoftly.github.io/zsoftly-services/"
           echo "Verifying deployment at $EXPECTED_URL"
@@ -108,8 +69,7 @@ jobs:
             ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
             if [ $ELAPSED_TIME -gt $TIMEOUT ]; then
               echo "❌ Deployment verification timed out after $TIMEOUT seconds (HTTP $STATUS)"
-              echo "This may be normal for the first deployment - please check the URL manually in a few minutes"
-              DEPLOYMENT_STATUS="pending"
+              DEPLOYMENT_STATUS="timeout"
               break
             fi
             echo "Waiting for deployment to become available (HTTP $STATUS)... $ELAPSED_TIME seconds elapsed"
@@ -117,7 +77,7 @@ jobs:
           done
           echo "DEPLOYMENT_STATUS=$DEPLOYMENT_STATUS" >> $GITHUB_ENV
 
-      - name: Send Google Chat notification on success
+      - name: Send Google Chat notification
         if: github.ref == 'refs/heads/main'
         env:
           ENCODED_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
@@ -127,40 +87,18 @@ jobs:
             exit 0
           fi
           
-          # Decode the base64 encoded webhook URL
           WEBHOOK_URL=$(echo "$ENCODED_WEBHOOK_URL" | base64 -d)
           
-          # Verify the webhook URL was decoded successfully
           if [ -z "$WEBHOOK_URL" ]; then
-            echo "❌ Failed to decode the webhook URL. Please check that it's properly base64 encoded."
+            echo "❌ Failed to decode the webhook URL."
             exit 0
           fi
           
-          # Test the webhook with a simple request
-          TEST_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            -H "Content-Type: application/json" \
-            -d '{"text": "Webhook test"}' \
-            "$WEBHOOK_URL")
-            
-          if [ "$TEST_RESPONSE" != "200" ]; then
-            echo "❌ Webhook test failed with status $TEST_RESPONSE. Skipping notification."
-            exit 0
+          DEPLOY_MESSAGE="has been deployed to GitHub Pages"
+          if [ "$DEPLOYMENT_STATUS" = "timeout" ]; then
+            DEPLOY_MESSAGE="was deployed, but verification timed out"
           fi
           
-          # Determine message based on deployment status
-          DEPLOY_MESSAGE="is being deployed"
-          if [ "$DEPLOYMENT_STATUS" = "success" ]; then
-            DEPLOY_MESSAGE="has been successfully deployed"
-          fi
-          
-          # Send notification
-          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
-            -H "Content-Type: application/json" \
-            -d "{\"text\": \"✅ **Documentation Update**\n\nThe ZSoftly documentation $DEPLOY_MESSAGE to GitHub Pages.\n\n**Repository**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
-            "$WEBHOOK_URL")
-          
-          if [ "$RESPONSE" = "200" ]; then
-            echo "✅ Google Chat notification sent successfully"
-          else
-            echo "❌ Google Chat notification failed with status $RESPONSE"
-          fi
+          curl -s -X POST -H "Content-Type: application/json" \
+            -d "{\"text\": \"📘 **Documentation Update**\n\nZSoftly documentation $DEPLOY_MESSAGE.\n\n**Repo**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
+            "$WEBHOOK_URL"
