@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script to send focused notifications about documentation validation to Google Chat
-# Usage: ./scripts/send-validation-notification.sh <webhook_url> <repo> <run_id> <pr_number> <pr_title> <pr_author>
+# Script to send simple notifications about documentation validation to Google Chat
+# Usage: ./scripts/send-validation-notification.sh <webhook_url> <repo> <run_id> [pr_number] [branch_name]
 
 # Exit on any error
 set -e
@@ -10,8 +10,7 @@ WEBHOOK_URL="$1"
 REPO="$2"
 RUN_ID="$3"
 PR_NUMBER="$4"
-PR_TITLE="$5"
-PR_AUTHOR="$6"
+BRANCH_NAME="$5"
 
 if [ -z "$WEBHOOK_URL" ]; then
   echo "❌ Error: Webhook URL is required"
@@ -28,95 +27,29 @@ if [ -z "$RUN_ID" ]; then
   exit 1
 fi
 
-# Get the logo URL - using color logo with no background
-LOGO_URL="https://raw.githubusercontent.com/${REPO}/main/docs/assets/images/217183861/Logo%20Files/png/Color%20logo%20-%20no%20background.png"
-
-# Create a unique thread key based on the branch or PR
-if [ -z "$PR_NUMBER" ]; then
-  # For branch push validations
-  THREAD_KEY="${REPO}-branch-$(echo $GITHUB_REF | cut -d/ -f3-)"
-else
+# Create Google Chat message JSON
+if [ -n "$PR_NUMBER" ]; then
   # For PR validations
   THREAD_KEY="${REPO}-pr-${PR_NUMBER}"
-fi
-
-# Create Google Chat card format JSON for validation results
-if [ -z "$PR_NUMBER" ]; then
-  # For branch push validations
+  PR_URL="https://github.com/${REPO}/pull/${PR_NUMBER}"
+  
   JSON_PAYLOAD=$(cat <<EOF
 {
-  "cards": [
-    {
-      "header": {
-        "title": "📋 Documentation Validation",
-        "subtitle": "${REPO}",
-        "imageUrl": "${LOGO_URL}"
-      },
-      "sections": [
-        {
-          "widgets": [
-            {
-              "textParagraph": {
-                "text": "✅ <b>Build Successful</b>: Documentation compilation and validation has passed on branch push."
-              }
-            },
-            {
-              "buttons": [
-                {
-                  "textButton": {
-                    "text": "View Workflow Run",
-                    "onClick": {
-                      "openLink": {
-                        "url": "https://github.com/${REPO}/actions/runs/${RUN_ID}"
-                      }
-                    }
-                  }
-                }
-              ]
-            }
-          ]
-        }
-      ]
-    }
-  ],
   "thread": {
     "threadKey": "${THREAD_KEY}"
-  }
-}
-EOF
-)
-else
-  # For PR validations
-  JSON_PAYLOAD=$(cat <<EOF
-{
+  },
   "cards": [
     {
       "header": {
-        "title": "📋 Documentation Validation",
-        "subtitle": "${REPO}",
-        "imageUrl": "${LOGO_URL}"
+        "title": "✅ Documentation Validation Passed",
+        "subtitle": "${REPO}"
       },
       "sections": [
         {
           "widgets": [
             {
               "textParagraph": {
-                "text": "✅ <b>PR Ready for Review</b>: Documentation validation has passed all checks."
-              }
-            },
-            {
-              "textParagraph": {
-                "text": "<b>Pull Request:</b> #${PR_NUMBER}: ${PR_TITLE}"
-              }
-            },
-            {
-              "textParagraph": {
-                "text": "<b>Author:</b> ${PR_AUTHOR}"
-              }
-            },
-            {
-              "textParagraph": {
-                "text": "<b>Checks Passed:</b> MkDocs build, internal links, image references"
+                "text": "PR #${PR_NUMBER} is ready for review and can be merged."
               }
             },
             {
@@ -126,7 +59,7 @@ else
                     "text": "Review PR",
                     "onClick": {
                       "openLink": {
-                        "url": "https://github.com/${REPO}/pull/${PR_NUMBER}"
+                        "url": "${PR_URL}"
                       }
                     }
                   }
@@ -147,10 +80,52 @@ else
         }
       ]
     }
-  ],
+  ]
+}
+EOF
+)
+else
+  # For branch push validations
+  THREAD_KEY="${REPO}-branch-${BRANCH_NAME}"
+  
+  JSON_PAYLOAD=$(cat <<EOF
+{
   "thread": {
     "threadKey": "${THREAD_KEY}"
-  }
+  },
+  "cards": [
+    {
+      "header": {
+        "title": "✅ Documentation Validation Passed",
+        "subtitle": "${REPO}"
+      },
+      "sections": [
+        {
+          "widgets": [
+            {
+              "textParagraph": {
+                "text": "Branch '${BRANCH_NAME}' validation completed successfully."
+              }
+            },
+            {
+              "buttons": [
+                {
+                  "textButton": {
+                    "text": "View Workflow",
+                    "onClick": {
+                      "openLink": {
+                        "url": "https://github.com/${REPO}/actions/runs/${RUN_ID}"
+                      }
+                    }
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 EOF
 )

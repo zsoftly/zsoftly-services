@@ -2,12 +2,15 @@ name: Validate Documentation
 
 on:
   push:
+    branches:
+      - 'feat*'    # Matches feat, feat/, feat-anything
+      - 'issue*'   # Matches issue, issue/, issue-anything
     branches-ignore:
       - main
       - gh-pages
   pull_request:
     branches: 
-      - '*'
+      - main      # Only run on PRs targeting main branch
     types: [opened, synchronize, reopened]
 
 permissions:
@@ -89,7 +92,7 @@ jobs:
               body: output
             })
       
-      # Send notification
+      # Send notification using the external script
       - name: Send notification
         env:
           ENCODED_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
@@ -106,72 +109,23 @@ jobs:
             exit 0
           fi
           
-          # Create thread key based on PR or branch
-          if [ "${{ github.event_name }}" == "pull_request" ]; then
-            THREAD_KEY="${{ github.repository }}-pr-${{ github.event.pull_request.number }}"
-            MESSAGE="✅ <b>Documentation Validation Passed</b><br>PR #${{ github.event.pull_request.number }} is ready for review and can be merged."
-            PR_LINK="https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
-            
-            JSON_PAYLOAD="{
-              \"text\": \"$MESSAGE\",
-              \"thread\": {
-                \"threadKey\": \"$THREAD_KEY\"
-              },
-              \"cards\": [{
-                \"sections\": [{
-                  \"widgets\": [{
-                    \"buttons\": [{
-                      \"textButton\": {
-                        \"text\": \"Review PR\",
-                        \"onClick\": {
-                          \"openLink\": {
-                            \"url\": \"$PR_LINK\"
-                          }
-                        }
-                      }
-                    },
-                    {
-                      \"textButton\": {
-                        \"text\": \"View Workflow\",
-                        \"onClick\": {
-                          \"openLink\": {
-                            \"url\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
-                          }
-                        }
-                      }
-                    }]
-                  }]
-                }]
-              }]
-            }"
-          else
-            THREAD_KEY="${{ github.repository }}-branch-${GITHUB_REF##*/}"
-            MESSAGE="✅ <b>Documentation Validation Passed</b><br>Branch '${GITHUB_REF##*/}' validation completed successfully."
-            
-            JSON_PAYLOAD="{
-              \"text\": \"$MESSAGE\",
-              \"thread\": {
-                \"threadKey\": \"$THREAD_KEY\"
-              },
-              \"cards\": [{
-                \"sections\": [{
-                  \"widgets\": [{
-                    \"buttons\": [{
-                      \"textButton\": {
-                        \"text\": \"View Workflow\",
-                        \"onClick\": {
-                          \"openLink\": {
-                            \"url\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
-                          }
-                        }
-                      }
-                    }]
-                  }]
-                }]
-              }]
-            }"
-          fi
+          # Make sure the script is executable
+          chmod +x ./scripts/send-validation-notification.sh
           
-          curl -s -X POST -H "Content-Type: application/json" \
-            -d "$JSON_PAYLOAD" \
-            "$WEBHOOK_URL"
+          # For PR events, include PR information
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            ./scripts/send-validation-notification.sh \
+              "$WEBHOOK_URL" \
+              "${{ github.repository }}" \
+              "${{ github.run_id }}" \
+              "${{ github.event.pull_request.number }}"
+          else
+            # For push events, include branch name
+            BRANCH_NAME="${GITHUB_REF##*/}"
+            ./scripts/send-validation-notification.sh \
+              "$WEBHOOK_URL" \
+              "${{ github.repository }}" \
+              "${{ github.run_id }}" \
+              "" \
+              "$BRANCH_NAME"
+          fi
