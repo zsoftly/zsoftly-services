@@ -10,8 +10,6 @@ permissions:
   contents: read
   pages: write
   id-token: write
-  issues: write
-  pull-requests: write
 
 concurrency:
   group: "pages"
@@ -23,8 +21,23 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
+
+      - name: Verify secrets
+        run: |
+          if [ -n "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" ]; then
+            echo "✅ Google Chat webhook URL is set"
+            # Extract domain to verify it's a Google domain without exposing the full URL
+            WEBHOOK_DOMAIN=$(echo "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" | sed -E 's/https?:\/\/([^/]+).*/\1/')
+            echo "Webhook domain: $WEBHOOK_DOMAIN"
+            # Check if it's a valid Google Chat webhook domain
+            if [[ "$WEBHOOK_DOMAIN" == *"googleapis.com" ]]; then
+              echo "✅ Webhook domain appears to be valid"
+            else
+              echo "⚠️ Warning: Webhook domain does not appear to be a Google API domain"
+            fi
+          else
+            echo "❌ Google Chat webhook URL is not set"
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -36,27 +49,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs-material
 
-      - name: Setup documentation files
-        run: |
-          mkdir -p docs/stylesheets
-          # Only copy files if they don't exist in docs/ already
-          if [ ! -f docs/index.md ]; then
-            cp README.md docs/index.md
-          fi
-          for file in security-services.md devops-services.md cloud-migration.md digital-transformation.md; do
-            if [ ! -f docs/$file ]; then
-              cp $file docs/
-            fi
-          done
-          # Remove the filepath comments and fix navigation
-          for file in docs/*.md; do
-            if [ "$(head -n 1 $file | grep 'filepath:')" ]; then
-              sed -i '1d' "$file"
-            fi
-            sed -i 's|\[Back to Service Portfolio\](README.md)|[Back to Home](index.md)|g' "$file"
-          done
-          # Remove index.md entries that aren't needed
-          rm -f docs/README.md
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
 
       - name: Build documentation
         run: mkdocs build
@@ -66,17 +60,29 @@ jobs:
         with:
           path: ./site
 
-      - name: Send Google Chat notification - Ready for Deployment
-        if: github.ref == 'refs/heads/main'
-        run: |
-          curl -X POST \
-          -H "Content-Type: application/json" \
-          -d "{\"text\": \"🔄 **Documentation Build Complete**\\n\\nThe ZSoftly documentation has been built successfully and is being deployed.\\n\\n**Repository**: ${{ github.repository }}\\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
-          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
-
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v3
+
+      - name: Send Google Chat notification on success
+        if: success()
+        run: |
+          # Test curl with minimal content to validate webhook
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+          -H "Content-Type: application/json" \
+          -d "{\"text\": \"✅ Testing webhook connection\"}" \
+          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }})
+          
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ Webhook test successful"
+            # Now send the actual notification
+            curl -X POST \
+            -H "Content-Type: application/json" \
+            -d "{\"text\": \"✅ **Documentation Deployment Successful**\\n\\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\\n\\n**Repository**: ${{ github.repository }}\\n**URL**: ${{ steps.deployment.outputs.page_url }}\\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
+            ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+          else
+            echo "❌ Webhook test failed with status $RESPONSE"
+          fi
 
       - name: Verify deployment
         run: |
@@ -100,45 +106,3 @@ jobs:
             echo "Waiting for deployment to become available (HTTP $STATUS)..."
             sleep $INTERVAL
           done
-
-      - name: Send Google Chat notification on success
-        if: success() && github.ref == 'refs/heads/main'
-        run: |
-          curl -X POST \
-          -H "Content-Type: application/json" \
-          -d "{\"text\": \"✅ **Documentation Deployment Successful**\\n\\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\\n\\n**Repository**: ${{ github.repository }}\\n**URL**: ${{ steps.deployment.outputs.page_url }}\\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
-          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
-
-      - name: Send Google Chat notification on failure
-        if: failure() && github.ref == 'refs/heads/main'
-        run: |
-          curl -X POST \
-          -H "Content-Type: application/json" \
-          -d "{\"text\": \"⚠️ **Documentation Deployment Failed**\\n\\nThe ZSoftly documentation deployment to GitHub Pages has failed.\\n\\n**Repository**: ${{ github.repository }}\\n**Action**: [View workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
-          ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
-
-      - name: Send notification on PR (success)
-        if: success() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number || null,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '✅ Documentation successfully deployed to GitHub Pages: ${{ steps.deployment.outputs.page_url }}'
-            })
-
-      - name: Send notification on PR (failure)
-        if: failure() && github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            github.rest.issues.createComment({
-              issue_number: context.issue.number || null,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: '⚠️ Documentation deployment failed. Please check the [workflow logs](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}) for details.'
-            })
