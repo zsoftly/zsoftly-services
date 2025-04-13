@@ -3,11 +3,11 @@ name: Validate Documentation
 on:
   push:
     branches-ignore:
-      - main  # Main branch is already covered by the deployment workflow
-      - gh-pages  # Skip the generated pages branch
+      - main
+      - gh-pages
   pull_request:
     branches: 
-      - '*'  # Run on all pull requests
+      - '*'
     types: [opened, synchronize, reopened]
 
 permissions:
@@ -15,17 +15,14 @@ permissions:
   issues: write
   pull-requests: write
 
-# Simple concurrency configuration: one run per branch or PR
+# Simple concurrency - one run per branch or PR
 concurrency:
   group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
-  validate-and-notify:
+  validate:
     runs-on: ubuntu-latest
-    # Skip push events that are associated with a PR
-    # This avoids duplicate runs when pushing to a PR branch
-    if: ${{ github.event_name == 'pull_request' || !contains(github.event.head_commit.message, 'Merge pull request') }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -38,7 +35,7 @@ jobs:
       - name: Setup documentation files
         run: |
           mkdir -p docs/stylesheets
-          # Only copy files if they don't exist in docs/ already
+          # Copy files if needed
           if [ ! -f docs/index.md ]; then
             cp README.md docs/index.md
           fi
@@ -47,7 +44,7 @@ jobs:
               cp $file docs/
             fi
           done
-          # Remove the filepath comments and fix navigation
+          # Fix file content
           for file in docs/*.md; do
             if [ -f "$file" ] && [ "$(head -n 1 $file | grep 'filepath:')" ]; then
               sed -i '1d' "$file"
@@ -56,7 +53,6 @@ jobs:
               sed -i 's|\[Back to Service Portfolio\](README.md)|[Back to Home](index.md)|g' "$file"
             fi
           done
-          # Remove index.md entries that aren't needed
           if [ -f "docs/README.md" ]; then
             rm -f docs/README.md
           fi
@@ -66,14 +62,13 @@ jobs:
           python -m pip install --upgrade pip
           pip install mkdocs-material
           
-      - name: Check for broken links
-        id: validation
+      - name: Run validation
         run: |
-          echo "Checking for broken internal links and image references..."
+          echo "Running documentation validation..."
           mkdocs build --strict
           echo "✅ Documentation validation passed"
           
-      # Only add PR comment if this is a pull request  
+      # Add PR comment
       - name: Comment on PR
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
@@ -83,16 +78,6 @@ jobs:
             const output = `## Documentation Validation Results
             
             ✅ Documentation validation completed successfully!
-            
-            The following checks passed:
-            - MkDocs build with strict mode
-            - Internal link validation
-            - Image reference validation
-            
-            You can preview these changes locally by running:
-            \`\`\`bash
-            mkdocs serve
-            \`\`\`
             
             **This PR is ready for review and can be merged.**
             `;
@@ -104,8 +89,8 @@ jobs:
               body: output
             })
       
-      # Send notification using the external script  
-      - name: Send Google Chat notification
+      # Send notification
+      - name: Send notification
         env:
           ENCODED_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
         run: |
@@ -121,22 +106,72 @@ jobs:
             exit 0
           fi
           
-          # Make sure the script is executable
-          chmod +x ./scripts/send-validation-notification.sh
-          
-          # For PR events, include PR information
+          # Create thread key based on PR or branch
           if [ "${{ github.event_name }}" == "pull_request" ]; then
-            ./scripts/send-validation-notification.sh \
-              "$WEBHOOK_URL" \
-              "${{ github.repository }}" \
-              "${{ github.run_id }}" \
-              "${{ github.event.pull_request.number }}" \
-              "${{ github.event.pull_request.title }}" \
-              "${{ github.event.pull_request.user.login }}"
+            THREAD_KEY="${{ github.repository }}-pr-${{ github.event.pull_request.number }}"
+            MESSAGE="✅ <b>Documentation Validation Passed</b><br>PR #${{ github.event.pull_request.number }} is ready for review and can be merged."
+            PR_LINK="https://github.com/${{ github.repository }}/pull/${{ github.event.pull_request.number }}"
+            
+            JSON_PAYLOAD="{
+              \"text\": \"$MESSAGE\",
+              \"thread\": {
+                \"threadKey\": \"$THREAD_KEY\"
+              },
+              \"cards\": [{
+                \"sections\": [{
+                  \"widgets\": [{
+                    \"buttons\": [{
+                      \"textButton\": {
+                        \"text\": \"Review PR\",
+                        \"onClick\": {
+                          \"openLink\": {
+                            \"url\": \"$PR_LINK\"
+                          }
+                        }
+                      }
+                    },
+                    {
+                      \"textButton\": {
+                        \"text\": \"View Workflow\",
+                        \"onClick\": {
+                          \"openLink\": {
+                            \"url\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                          }
+                        }
+                      }
+                    }]
+                  }]
+                }]
+              }]
+            }"
           else
-            # For push events, don't include PR info
-            ./scripts/send-validation-notification.sh \
-              "$WEBHOOK_URL" \
-              "${{ github.repository }}" \
-              "${{ github.run_id }}"
+            THREAD_KEY="${{ github.repository }}-branch-${GITHUB_REF##*/}"
+            MESSAGE="✅ <b>Documentation Validation Passed</b><br>Branch '${GITHUB_REF##*/}' validation completed successfully."
+            
+            JSON_PAYLOAD="{
+              \"text\": \"$MESSAGE\",
+              \"thread\": {
+                \"threadKey\": \"$THREAD_KEY\"
+              },
+              \"cards\": [{
+                \"sections\": [{
+                  \"widgets\": [{
+                    \"buttons\": [{
+                      \"textButton\": {
+                        \"text\": \"View Workflow\",
+                        \"onClick\": {
+                          \"openLink\": {
+                            \"url\": \"https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+                          }
+                        }
+                      }
+                    }]
+                  }]
+                }]
+              }]
+            }"
           fi
+          
+          curl -s -X POST -H "Content-Type: application/json" \
+            -d "$JSON_PAYLOAD" \
+            "$WEBHOOK_URL"
