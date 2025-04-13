@@ -3,15 +3,13 @@ name: Validate Documentation
 on:
   push:
     branches:
-      - 'feat*'    # Matches feat, feat/, feat-anything
-      - 'feature/*' # Matches feature/anything
-      - 'issue*'   # Matches issue, issue/, issue-anything
-    branches-ignore:
-      - main
-      - gh-pages
+      - 'feat*'     # Matches feat, feat/, feat-anything
+      - 'issue*'    # Matches issue, issue/, issue-anything
+      - '!main'     # Excludes main branch
+      - '!gh-pages' # Excludes gh-pages branch
   pull_request:
     branches: 
-      - 'main'     # Only run on PRs targeting main branch
+      - 'main'      # Only run on PRs targeting main branch
     types: [opened, synchronize, reopened]
 
 permissions:
