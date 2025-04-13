@@ -51,30 +51,25 @@ jobs:
           publish_dir: ./site
           force_orphan: true
 
-      - name: Verify deployment
+      - name: Verify deployment (short retry)
         run: |
-          TIMEOUT=600
-          INTERVAL=20
+          ATTEMPTS=3
+          INTERVAL=10
           EXPECTED_URL="https://zsoftly.github.io/zsoftly-services/"
-          echo "Verifying deployment at $EXPECTED_URL"
-          START_TIME=$(date +%s)
-          while :; do
+          echo "Checking if deployment is live at $EXPECTED_URL"
+          DEPLOYMENT_STATUS="timeout"
+
+          for i in $(seq 1 $ATTEMPTS); do
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$EXPECTED_URL")
             if [ "$STATUS" = "200" ]; then
-              echo "✅ Deployment verified successfully (HTTP $STATUS)"
+              echo "✅ Site is live (HTTP $STATUS)"
               DEPLOYMENT_STATUS="success"
               break
             fi
-            CURRENT_TIME=$(date +%s)
-            ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
-            if [ $ELAPSED_TIME -gt $TIMEOUT ]; then
-              echo "❌ Deployment verification timed out after $TIMEOUT seconds (HTTP $STATUS)"
-              DEPLOYMENT_STATUS="timeout"
-              break
-            fi
-            echo "Waiting for deployment to become available (HTTP $STATUS)... $ELAPSED_TIME seconds elapsed"
+            echo "Attempt $i/$ATTEMPTS failed (HTTP $STATUS). Retrying in $INTERVALs..."
             sleep $INTERVAL
           done
+
           echo "DEPLOYMENT_STATUS=$DEPLOYMENT_STATUS" >> $GITHUB_ENV
 
       - name: Send Google Chat notification
@@ -86,19 +81,19 @@ jobs:
             echo "❌ GOOGLE_CHAT_WEBHOOK_URL secret is not set. Skipping notification."
             exit 0
           fi
-          
+
           WEBHOOK_URL=$(echo "$ENCODED_WEBHOOK_URL" | base64 -d)
-          
+
           if [ -z "$WEBHOOK_URL" ]; then
             echo "❌ Failed to decode the webhook URL."
             exit 0
           fi
-          
+
           DEPLOY_MESSAGE="has been deployed to GitHub Pages"
           if [ "$DEPLOYMENT_STATUS" = "timeout" ]; then
             DEPLOY_MESSAGE="was deployed, but verification timed out"
           fi
-          
+
           curl -s -X POST -H "Content-Type: application/json" \
             -d "{\"text\": \"📘 **Documentation Update**\n\nZSoftly documentation $DEPLOY_MESSAGE.\n\n**Repo**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Run**: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"}" \
             "$WEBHOOK_URL"
