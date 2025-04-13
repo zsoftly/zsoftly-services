@@ -31,36 +31,44 @@ fi
 # For non-PR runs, we may not have PR information
 if [ -z "$PR_NUMBER" ]; then
   PR_INFO="Branch push validation"
-  PR_BUTTONS=""
+  BUTTONS_SECTION="\"buttons\": [
+      {
+        \"textButton\": {
+          \"text\": \"View Workflow Run\",
+          \"onClick\": {
+            \"openLink\": {
+              \"url\": \"https://github.com/${REPO}/actions/runs/${RUN_ID}\"
+            }
+          }
+        }
+      }
+    ]"
 else
   PR_INFO="#${PR_NUMBER}: ${PR_TITLE}"
   PR_AUTHOR_INFO="${PR_AUTHOR}"
   
-  PR_BUTTONS=$(cat <<EOF
-  {
-    "buttonList": {
-      "buttons": [
-        {
-          "text": "View Pull Request",
-          "onClick": {
-            "openLink": {
-              "url": "https://github.com/${REPO}/pull/${PR_NUMBER}"
-            }
-          }
-        },
-        {
-          "text": "View Workflow Run",
-          "onClick": {
-            "openLink": {
-              "url": "https://github.com/${REPO}/actions/runs/${RUN_ID}"
+  BUTTONS_SECTION="\"buttons\": [
+      {
+        \"textButton\": {
+          \"text\": \"View Pull Request\",
+          \"onClick\": {
+            \"openLink\": {
+              \"url\": \"https://github.com/${REPO}/pull/${PR_NUMBER}\"
             }
           }
         }
-      ]
-    }
-  }
-EOF
-  )
+      },
+      {
+        \"textButton\": {
+          \"text\": \"View Workflow Run\",
+          \"onClick\": {
+            \"openLink\": {
+              \"url\": \"https://github.com/${REPO}/actions/runs/${RUN_ID}\"
+            }
+          }
+        }
+      }
+    ]"
 fi
 
 # Get the logo URL - using color logo with no background
@@ -71,12 +79,11 @@ if [ -z "$PR_NUMBER" ]; then
   # For branch push validations
   JSON_PAYLOAD=$(cat <<EOF
 {
-  "cardsV2": [{
-    "card": {
+  "cards": [
+    {
       "header": {
         "title": "📋 Documentation Validation",
         "subtitle": "${REPO}",
-        "imageStyle": "AVATAR",
         "imageUrl": "${LOGO_URL}"
       },
       "sections": [
@@ -87,26 +94,15 @@ if [ -z "$PR_NUMBER" ]; then
               "textParagraph": {
                 "text": "Documentation validation has successfully completed for branch push."
               }
-            },
-            {
-              "buttonList": {
-                "buttons": [
-                  {
-                    "text": "View Workflow Run",
-                    "onClick": {
-                      "openLink": {
-                        "url": "https://github.com/${REPO}/actions/runs/${RUN_ID}"
-                      }
-                    }
-                  }
-                ]
-              }
             }
           ]
+        },
+        {
+          ${BUTTONS_SECTION}
         }
       ]
     }
-  }]
+  ]
 }
 EOF
 )
@@ -114,12 +110,11 @@ else
   # For PR validations
   JSON_PAYLOAD=$(cat <<EOF
 {
-  "cardsV2": [{
-    "card": {
+  "cards": [
+    {
       "header": {
         "title": "📋 Documentation Validation",
         "subtitle": "${REPO}",
-        "imageStyle": "AVATAR",
         "imageUrl": "${LOGO_URL}"
       },
       "sections": [
@@ -132,23 +127,23 @@ else
               }
             },
             {
-              "keyValue": {
-                "topLabel": "Pull Request",
-                "content": "${PR_INFO}"
+              "textParagraph": {
+                "text": "<b>Pull Request:</b> ${PR_INFO}"
               }
             },
             {
-              "keyValue": {
-                "topLabel": "Author",
-                "content": "${PR_AUTHOR_INFO}"
+              "textParagraph": {
+                "text": "<b>Author:</b> ${PR_AUTHOR_INFO}"
               }
-            },
-            ${PR_BUTTONS}
+            }
           ]
+        },
+        {
+          ${BUTTONS_SECTION}
         }
       ]
     }
-  }]
+  ]
 }
 EOF
 )

@@ -40,13 +40,12 @@ LOGO_URL="https://raw.githubusercontent.com/${REPO}/main/docs/assets/images/2171
 # Create Google Chat card format JSON
 JSON_PAYLOAD=$(cat <<EOF
 {
-  "cardsV2": [{
-    "card": {
+  "cards": [
+    {
       "header": {
         "title": "🚀 Documentation Deployment Process",
         "subtitle": "${REPO}",
-        "imageUrl": "${LOGO_URL}",
-        "imageStyle": "AVATAR"
+        "imageUrl": "${LOGO_URL}"
       },
       "sections": [
         {
@@ -56,11 +55,15 @@ JSON_PAYLOAD=$(cat <<EOF
               "textParagraph": {
                 "text": "The documentation has been built and pushed to the gh-pages branch."
               }
-            },
+            }
+          ]
+        },
+        {
+          "widgets": [
             {
-              "buttonList": {
-                "buttons": [
-                  {
+              "buttons": [
+                {
+                  "textButton": {
                     "text": "View Build Details",
                     "onClick": {
                       "openLink": {
@@ -68,8 +71,8 @@ JSON_PAYLOAD=$(cat <<EOF
                       }
                     }
                   }
-                ]
-              }
+                }
+              ]
             }
           ]
         },
@@ -80,19 +83,25 @@ JSON_PAYLOAD=$(cat <<EOF
               "textParagraph": {
                 "text": "The GitHub Pages workflow has been triggered and will deploy shortly."
               }
-            },
+            }
+          ]
+        },
+        {
+          "widgets": [
             {
-              "buttonList": {
-                "buttons": [
-                  {
+              "buttons": [
+                {
+                  "textButton": {
                     "text": "Check Pages Workflow",
                     "onClick": {
                       "openLink": {
                         "url": "${PAGES_WORKFLOW_URL}"
                       }
                     }
-                  },
-                  {
+                  }
+                },
+                {
+                  "textButton": {
                     "text": "View Documentation",
                     "onClick": {
                       "openLink": {
@@ -100,26 +109,23 @@ JSON_PAYLOAD=$(cat <<EOF
                       }
                     }
                   }
-                ]
-              }
+                }
+              ]
             }
           ]
         },
         {
           "widgets": [
             {
-              "decoratedText": {
-                "text": "Please verify the GitHub Pages deployment completed successfully",
-                "startIcon": {
-                  "knownIcon": "DESCRIPTION"
-                }
+              "textParagraph": {
+                "text": "⚠️ Please verify the GitHub Pages deployment completed successfully"
               }
             }
           ]
         }
       ]
     }
-  }]
+  ]
 }
 EOF
 )
