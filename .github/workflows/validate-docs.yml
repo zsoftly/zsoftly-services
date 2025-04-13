@@ -14,9 +14,10 @@ permissions:
   issues: write
   pull-requests: write
 
-# Prevent duplicate workflow runs when a PR is open for a branch
+# Concurrency configuration that properly handles both PR and push events
 concurrency:
-  group: validation-${{ github.head_ref || github.ref_name }}
+  # Use different group keys for PR and push events
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && format('pr-{0}', github.event.pull_request.number) || format('branch-{0}', github.ref_name) }}
   cancel-in-progress: true
 
 jobs:
@@ -50,12 +51,12 @@ jobs:
               console.log(`Skipping validation for push event as PR #${prs.data[0].number} exists`);
             }
             
-            return core.setOutput('has_pr', hasPR.toString());
+            core.setOutput('has_pr', hasPR.toString());
 
   setup:
     needs: [check-if-pr-exists]
     # Skip if this is a push event and there's an open PR for this branch
-    if: github.event_name == 'pull_request' || needs.check-if-pr-exists.outputs.has_pr != 'true'
+    if: ${{ github.event_name == 'pull_request' || needs.check-if-pr-exists.outputs.has_pr != 'true' }}
     runs-on: ubuntu-latest
     outputs:
       docs_ready: ${{ steps.setup_docs.outputs.result }}
@@ -94,7 +95,7 @@ jobs:
           if [ -f "docs/README.md" ]; then
             rm -f docs/README.md
           fi
-          echo "::set-output name=result::true"
+          echo "result=true" >> $GITHUB_OUTPUT
 
   validate-and-notify:
     needs: setup
