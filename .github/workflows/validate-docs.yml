@@ -4,6 +4,7 @@ on:
   push:
     branches-ignore:
       - main  # Main branch is already covered by the deployment workflow
+      - gh-pages  # Skip the generated pages branch
   pull_request:
     branches: 
       - '*'  # Run on all pull requests
@@ -13,8 +14,48 @@ permissions:
   issues: write
   pull-requests: write
 
+# Prevent duplicate workflow runs when a PR is open for a branch
+concurrency:
+  group: validation-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
 jobs:
+  # Skip validation on push events if there's an open PR for this branch
+  check-if-pr-exists:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+    outputs:
+      has_pr: ${{ steps.check_pr.outputs.has_pr }}
+    steps:
+      - name: Check for open PRs for this branch
+        id: check_pr
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const branch = context.ref.replace('refs/heads/', '');
+            console.log(`Checking for open PRs for branch: ${branch}`);
+            
+            const prs = await github.rest.pulls.list({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              state: 'open',
+              head: `${context.repo.owner}:${branch}`
+            });
+            
+            const hasPR = prs.data.length > 0;
+            console.log(`Branch has open PR: ${hasPR}`);
+            
+            if (hasPR) {
+              console.log(`Skipping validation for push event as PR #${prs.data[0].number} exists`);
+            }
+            
+            return core.setOutput('has_pr', hasPR.toString());
+
   setup:
+    needs: [check-if-pr-exists]
+    # Skip if this is a push event and there's an open PR for this branch
+    if: github.event_name == 'pull_request' || needs.check-if-pr-exists.outputs.has_pr != 'true'
     runs-on: ubuntu-latest
     outputs:
       docs_ready: ${{ steps.setup_docs.outputs.result }}
