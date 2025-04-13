@@ -118,7 +118,7 @@ jobs:
         if: success() && github.ref == 'refs/heads/main'
         run: |
           # Decode the base64 encoded webhook URL
-          WEBHOOK_URL=$(echo "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL_B64 }}" | base64 -d)
+          WEBHOOK_URL=$(echo "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" | base64 -d)
           
           # Test the webhook
           TEST_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
