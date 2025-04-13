@@ -4,13 +4,14 @@ on:
   push:
     branches:
       - 'feat*'    # Matches feat, feat/, feat-anything
+      - 'feature/*' # Matches feature/anything
       - 'issue*'   # Matches issue, issue/, issue-anything
     branches-ignore:
       - main
       - gh-pages
   pull_request:
     branches: 
-      - main      # Only run on PRs targeting main branch
+      - 'main'     # Only run on PRs targeting main branch
     types: [opened, synchronize, reopened]
 
 permissions:
