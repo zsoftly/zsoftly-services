@@ -1,0 +1,59 @@
+title: ZSoftly
+description: Enterprise-Grade IT Solutions for Mid-Market Businesses
+url: https://zsoftly.github.io
+baseurl: /zsoftly-services
+
+# Build settings
+markdown: kramdown
+theme: minima
+plugins:
+  - jekyll-feed
+  - jekyll-seo-tag
+  - jekyll-paginate
+
+# Pagination
+paginate: 10
+paginate_path: "/blog/page:num/"
+
+# Collections
+collections:
+  services:
+    output: true
+    permalink: /:collection/:name/
+
+# Default front matter settings
+defaults:
+  -
+    scope:
+      path: ""
+      type: "pages"
+    values:
+      layout: "page"
+  -
+    scope:
+      path: ""
+      type: "services"
+    values:
+      layout: "service"
+
+# Exclude files from processing
+exclude:
+  - README.md
+  - Gemfile
+  - Gemfile.lock
+  - vendor
+  - .gitignore
+  - mkdocs.yml
+
+# Navigation
+header_pages:
+  - index.md
+  - services.md
+  - contact.md
+
+# Company information
+company:
+  name: ZSoftly
+  email: info@zsoftly.com
+  phone: +1 (613) 979-1065
+  address: 116 Albert Street, Suite 300, Ottawa, Ontario K1P 5G3

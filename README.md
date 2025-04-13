@@ -1,110 +1,80 @@
-# ZSoftly Documentation
+# ZSoftly Services Website
 
-This repository contains the official documentation for ZSoftly services, deployed using GitHub Pages with MkDocs Material theme.
+This repository contains the ZSoftly website built with Jekyll.
 
-## About This Repository
+## Overview
 
-This repository houses Markdown documentation for ZSoftly's service portfolio. The documentation is automatically built and deployed to GitHub Pages using a CI/CD pipeline implemented with GitHub Actions.
+The ZSoftly website showcases our enterprise-grade IT solutions for mid-market businesses, focusing on security services, DevOps services, cloud migration, and digital transformation.
 
-## CI/CD Pipeline
+## Technology Stack
 
-The documentation site is built and deployed using a multi-stage GitHub Actions workflow:
+- **Framework**: Jekyll
+- **Theme**: Modified Minima theme
+- **Styling**: Custom SCSS
+- **JavaScript**: Vanilla JS for theme switching and interactivity
+- **Icons**: Font Awesome
 
-- **Trigger**: Automatically on push to the `main` branch or manually via workflow dispatch
-- **Build**: First job that builds the documentation using MkDocs with the Material theme
-- **Prepare**: Second job that prepares the deployment and creates a staging environment
-- **Deploy**: Final job with manual approval requirement for deploying to GitHub Pages
-- **Features**: Dark/light theme switching, responsive design, search functionality
-- **Notifications**: Google Chat webhook notifications for deployment status updates
-
-The deployment process requires manual approval through GitHub's environment protection feature, giving you control over when documentation is published to production. Once the build is complete, a notification is sent to the configured Google Chat space to alert the team that deployment is ready for approval.
-
-### Google Chat Webhook Setup
-
-To receive deployment notifications in Google Chat:
-
-1. In Google Chat, create a space or use an existing one for deployment notifications
-2. Click on the space name > "Apps & Integrations" > "Add webhooks"
-3. Name your webhook (e.g., "ZSoftly Docs Deployment")
-4. Copy the webhook URL provided
-5. In your GitHub repository, go to Settings > Secrets and Variables > Actions
-6. Add a new repository secret with name `GOOGLE_CHAT_WEBHOOK_URL` and paste the webhook URL as the value
-
-Once configured, the CI/CD pipeline will send the following notifications to the Google Chat space:
-- When a build is complete and ready for deployment approval
-- When deployment succeeds or fails
-
-## Local Development Setup
+## Local Development
 
 ### Prerequisites
 
-- Python 3.x
-- Git
+- Ruby version 2.7.0 or higher
+- Bundler
+- Jekyll
 
 ### Installation
 
-1. Clone this repository:
+1. Clone this repository
    ```bash
    git clone https://github.com/zsoftly/zsoftly-services.git
    cd zsoftly-services
    ```
 
-2. Install the required packages:
+2. Install dependencies
    ```bash
-   pip install mkdocs-material
+   bundle install
    ```
 
-3. Start the local development server:
+3. Run the development server
    ```bash
-   mkdocs serve
+   bundle exec jekyll serve
    ```
 
-4. Open your browser and visit `http://127.0.0.1:8000/` to view the documentation site.
+4. View the site at http://localhost:4000/zsoftly-services/
 
-### Troubleshooting
+## Site Structure
 
-If you encounter issues with the paths not showing:
+- `_config.yml` - Jekyll configuration
+- `_layouts/` - Custom layout templates
+- `_includes/` - Reusable components
+- `_services/` - Service page collection
+- `assets/` - Static files (CSS, JS, images)
+- Various markdown files for content pages
 
-```bash
-# If mkdocs is installed in ~/.local/bin
-export PATH="$HOME/.local/bin:$PATH"
+## Deployment
 
-# Or run with the full path
-~/.local/bin/mkdocs serve
-```
+The site is deployed to GitHub Pages. Any push to the main branch will trigger a build and deployment.
 
-## Adding or Updating Content
+## Content Updates
 
-1. Create or edit Markdown files in the `docs/` directory
-2. Preview changes locally using `mkdocs serve`
-3. Commit and push changes to the `main` branch
-4. GitHub Actions will automatically build the site and send a notification to Google Chat
-5. Follow the link in the notification to review and approve the deployment
+### Adding a New Service
 
-## Folder Structure
+1. Create a new markdown file in the `_services` directory
+2. Add proper front matter:
+   ```yaml
+   ---
+   layout: service
+   title: Service Name
+   permalink: /services/service-name/
+   excerpt: Brief description of the service
+   ---
+   ```
+3. Add your content in markdown format
 
-- `mkdocs.yml`: Configuration file for MkDocs
-- `docs/`: Main documentation directory containing all Markdown files
-  - `index.md`: Home page content
-  - `security-services.md`, `devops-services.md`, etc.: Service-specific documentation
-  - `assets/`: Contains images and brand resources
-  - `stylesheets/`: Contains CSS customizations
+### Updating Existing Content
 
-## Technology Stack
+Edit the relevant markdown file in the repository.
 
-- **MkDocs**: Documentation site generator
-- **Material for MkDocs**: Theme for professional documentation
-- **GitHub Actions**: CI/CD pipeline automation
-- **GitHub Pages**: Hosting platform
-- **Google Chat Webhooks**: Deployment notifications
+## License
 
-## Contact
-
-For questions or issues related to this documentation repository, please contact:
-
-- **Email**: info@zsoftly.com
-- **GitHub**: [ZSoftly](https://github.com/zsoftly)
-
----
-
-© 2025 ZSoftly. All rights reserved.
+Copyright © 2025 ZSoftly Technologies Inc. All rights reserved.

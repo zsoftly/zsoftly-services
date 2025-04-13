@@ -1,0 +1,23 @@
+---
+layout: default
+---
+<article class="service">
+
+  <header class="service-header">
+    <h1 class="service-title">{{ page.title | escape }}</h1>
+  </header>
+
+  <div class="service-content">
+    {{ content }}
+  </div>
+
+  <div class="service-footer">
+    <a href="{{ '/services' | relative_url }}" class="button">
+      <i class="fas fa-arrow-left"></i> All Services
+    </a>
+    <a href="{{ '/contact' | relative_url }}" class="button button-primary">
+      <i class="fas fa-envelope"></i> Contact Us
+    </a>
+  </div>
+
+</article>

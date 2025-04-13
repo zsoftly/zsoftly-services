@@ -19,3 +19,22 @@ __pycache__/
 .Trashes
 ehthumbs.db
 Thumbs.db
+
+# Jekyll build output
+_site/
+.sass-cache/
+.jekyll-cache/
+.jekyll-metadata
+vendor/
+
+# Ruby environment files
+.bundle/
+Gemfile.lock
+
+# Editor files
+*.swp
+*.swo
+.idea/
+.vscode/
+*.sublime-project
+*.sublime-workspace
