@@ -80,10 +80,14 @@ jobs:
   
   comment-pr:
     needs: validate
-    if: github.event_name == 'pull_request'
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # Only add PR comment if this is a pull request  
       - name: Comment on PR
+        if: github.event_name == 'pull_request'
         uses: actions/github-script@v6
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
@@ -109,3 +113,40 @@ jobs:
               repo: context.repo.repo,
               body: output
             })
+      
+      # Send notification using the external script  
+      - name: Send Google Chat notification
+        env:
+          ENCODED_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
+        run: |
+          if [ -z "$ENCODED_WEBHOOK_URL" ]; then
+            echo "❌ GOOGLE_CHAT_WEBHOOK_URL secret is not set. Skipping notification."
+            exit 0
+          fi
+
+          WEBHOOK_URL=$(echo "$ENCODED_WEBHOOK_URL" | base64 -d)
+
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo "❌ Failed to decode the webhook URL."
+            exit 0
+          fi
+          
+          # Make sure the script is executable
+          chmod +x ./scripts/send-validation-notification.sh
+          
+          # For PR events, include PR information
+          if [ "${{ github.event_name }}" == "pull_request" ]; then
+            ./scripts/send-validation-notification.sh \
+              "$WEBHOOK_URL" \
+              "${{ github.repository }}" \
+              "${{ github.run_id }}" \
+              "${{ github.event.pull_request.number }}" \
+              "${{ github.event.pull_request.title }}" \
+              "${{ github.event.pull_request.user.login }}"
+          else
+            # For push events, don't include PR info
+            ./scripts/send-validation-notification.sh \
+              "$WEBHOOK_URL" \
+              "${{ github.repository }}" \
+              "${{ github.run_id }}"
+          fi
