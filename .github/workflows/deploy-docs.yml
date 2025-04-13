@@ -92,8 +92,8 @@ jobs:
 
       - name: Verify deployment exists
         run: |
-          TIMEOUT=300
-          INTERVAL=10
+          TIMEOUT=600  # Increased to 10 minutes
+          INTERVAL=20
           EXPECTED_URL="https://zsoftly.github.io/zsoftly-services/"
           echo "Verifying deployment at $EXPECTED_URL"
           START_TIME=$(date +%s)
@@ -101,37 +101,66 @@ jobs:
             STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$EXPECTED_URL")
             if [ "$STATUS" = "200" ]; then
               echo "✅ Deployment verified successfully (HTTP $STATUS)"
-              exit 0
+              DEPLOYMENT_STATUS="success"
+              break
             fi
             CURRENT_TIME=$(date +%s)
             ELAPSED_TIME=$((CURRENT_TIME - START_TIME))
             if [ $ELAPSED_TIME -gt $TIMEOUT ]; then
               echo "❌ Deployment verification timed out after $TIMEOUT seconds (HTTP $STATUS)"
               echo "This may be normal for the first deployment - please check the URL manually in a few minutes"
-              exit 0  # Exit with success to prevent workflow failure
+              DEPLOYMENT_STATUS="pending"
+              break
             fi
-            echo "Waiting for deployment to become available (HTTP $STATUS)..."
+            echo "Waiting for deployment to become available (HTTP $STATUS)... $ELAPSED_TIME seconds elapsed"
             sleep $INTERVAL
           done
+          echo "DEPLOYMENT_STATUS=$DEPLOYMENT_STATUS" >> $GITHUB_ENV
 
       - name: Send Google Chat notification on success
-        if: success() && github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/main'
+        env:
+          ENCODED_WEBHOOK_URL: ${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}
         run: |
-          # Decode the base64 encoded webhook URL
-          WEBHOOK_URL=$(echo "${{ secrets.GOOGLE_CHAT_WEBHOOK_URL }}" | base64 -d)
+          if [ -z "$ENCODED_WEBHOOK_URL" ]; then
+            echo "❌ GOOGLE_CHAT_WEBHOOK_URL secret is not set. Skipping notification."
+            exit 0
+          fi
           
-          # Test the webhook
+          # Decode the base64 encoded webhook URL
+          WEBHOOK_URL=$(echo "$ENCODED_WEBHOOK_URL" | base64 -d)
+          
+          # Verify the webhook URL was decoded successfully
+          if [ -z "$WEBHOOK_URL" ]; then
+            echo "❌ Failed to decode the webhook URL. Please check that it's properly base64 encoded."
+            exit 0
+          fi
+          
+          # Test the webhook with a simple request
           TEST_RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
             -H "Content-Type: application/json" \
             -d '{"text": "Webhook test"}' \
             "$WEBHOOK_URL")
+            
+          if [ "$TEST_RESPONSE" != "200" ]; then
+            echo "❌ Webhook test failed with status $TEST_RESPONSE. Skipping notification."
+            exit 0
+          fi
           
-          if [ "$TEST_RESPONSE" = "200" ]; then
-            curl -X POST \
-              -H "Content-Type: application/json" \
-              -d '{"text": "✅ **Documentation Deployment Successful**\n\nThe ZSoftly documentation has been successfully deployed to GitHub Pages.\n\n**Repository**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})"}' \
-              "$WEBHOOK_URL"
-            echo "✅ Google Chat notification sent"
+          # Determine message based on deployment status
+          DEPLOY_MESSAGE="is being deployed"
+          if [ "$DEPLOYMENT_STATUS" = "success" ]; then
+            DEPLOY_MESSAGE="has been successfully deployed"
+          fi
+          
+          # Send notification
+          RESPONSE=$(curl -s -o /dev/null -w "%{http_code}" -X POST \
+            -H "Content-Type: application/json" \
+            -d "{\"text\": \"✅ **Documentation Update**\n\nThe ZSoftly documentation $DEPLOY_MESSAGE to GitHub Pages.\n\n**Repository**: ${{ github.repository }}\n**URL**: https://zsoftly.github.io/zsoftly-services/\n**Action**: [View workflow run](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})\"}" \
+            "$WEBHOOK_URL")
+          
+          if [ "$RESPONSE" = "200" ]; then
+            echo "✅ Google Chat notification sent successfully"
           else
-            echo "❌ Google Chat webhook test failed with status $TEST_RESPONSE"
+            echo "❌ Google Chat notification failed with status $RESPONSE"
           fi
