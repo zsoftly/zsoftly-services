@@ -66,6 +66,7 @@ We help organizations leverage powerful open source tools to accelerate their di
 - **Authentik**: Next-generation identity provider for streamlined authentication
 - **SigNoz**: Application performance monitoring and observability
 - **Traefik**: API gateway and edge router for microservices architectures
+- **GitLab**: Complete DevOps platform for modern software delivery (Official Partner)
 - **JumpCloud**: Cloud directory platform for unified identity management (Official Partner)
 - **Vanta**: Automated compliance monitoring and security platform (Official Partner)
 - **Prisma Cloud**: Palo Alto Networks' comprehensive cloud security platform (Official Partner)
@@ -88,7 +89,7 @@ Ready to accelerate your digital transformation journey? Contact us to discuss y
 
 - **Website**: [https://zsoftly.com](https://zsoftly.com)
 - **Email**: info@zsoftly.com
-- **Phone**: +1 (613) 979-1065
+- **Phone**: +1 (343) 503-0513
 
 ---
 

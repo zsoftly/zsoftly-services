@@ -80,7 +80,7 @@ We may update our privacy policy from time to time. We will notify you of any ch
 If you have questions about this privacy policy or our practices, please contact us at:
 
 - **Email**: privacy@zsoftly.com
-- **Phone**: +1 (613) 979-1065
+- **Phone**: +1 (343) 503-0513
 - **Mail**: ZSoftly, 116 Albert Street, Suite 300, Ottawa, Ontario K1P 5G3
 
 ---

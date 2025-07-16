@@ -80,6 +80,15 @@ extra:
     - icon: fontawesome/brands/linkedin
       link: https://www.linkedin.com/company/zsoftly-technologies
   
+  # Specialized service portals
+  service_portals:
+    - name: DevOps Portal
+      url: https://devops.zsoftly.com/
+      icon: fontawesome/solid/gears
+    - name: AWS & Cloud Portal  
+      url: https://cloud.zsoftly.com/
+      icon: fontawesome/brands/aws
+  
   # Add company logo for footer
   generator: false  # Hide "Made with Material for MkDocs" text
 
@@ -88,7 +97,10 @@ nav:
   - Services:
     - Security Services: security-services.md
     - DevOps Services: devops-services.md
+    - AWS Cloud Services: cloud-services.md
     - Cloud Migration: cloud-migration.md
     - Digital Transformation: digital-transformation.md
+  - Pricing: pricing.md
+  - Partnerships: partnerships.md
   - Contact: contact.md
   - Privacy Policy: privacy-policy.md
