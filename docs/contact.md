@@ -4,44 +4,43 @@
 
 We're here to help with your IT service needs. Please reach out using any of the methods below.
 
-### Connect with Us
+### Direct Contact
 
 <div class="grid cards" markdown>
 
 -   [:fontawesome-regular-envelope:{ .icon } **Email**](mailto:info@zsoftly.com)  
     [info@zsoftly.com](mailto:info@zsoftly.com)
 
--   [:fontawesome-solid-phone:{ .icon } **Phone**](tel:+16139791065)  
-    +1 (613) 979-1065
+-   [:fontawesome-solid-phone:{ .icon } **Phone**](tel:+13435030513)  
+    +1 (343) 503-0513
 
 -   [:fontawesome-brands-linkedin:{ .icon } **LinkedIn**](https://www.linkedin.com/company/zsoftly-technologies)  
-    [ZSoftly](https://www.linkedin.com/company/zsoftly-technologies)
+    [ZSoftly Technologies](https://www.linkedin.com/company/zsoftly-technologies)
 
--   [:fontawesome-solid-building:{ .icon } **Address**](https://maps.google.com/?q=116+Albert+Street,+Suite+300+Ottawa,+Ontario+K1P+5G3)  
-    116 Albert Street,  
-    Suite 300  
-    Ottawa, Ontario K1P 5G3
+-   [:fontawesome-brands-google:{ .icon } **Google Business**](https://www.google.com/search?q=zsoftly)  
+    [View Our Business Profile & Reviews](https://www.google.com/search?q=zsoftly)
 
 </div>
 
-## Schedule a Consultation
+## Online Contact & Booking
 
-To schedule a free consultation with our team of experts, please reach out to us via:
+### Contact Forms
+For online contact forms and detailed inquiries:
 
-- **Email**: [info@zsoftly.com](mailto:info@zsoftly.com)
-- **Phone**: +1 (613) 979-1065
+[**zsoftly.com/contact**](https://zsoftly.com/contact/){ .md-button .md-button--primary }
 
-We typically respond to all inquiries within one business day.
+### Service-Specific Consultation Booking
 
-## Office Hours
+<div class="grid cards" markdown>
 
-Our support team is available Monday through Friday from 9:00 AM to 5:00 PM Eastern Time.
+-   [:fontawesome-solid-gears:{ .icon } **DevOps Consultation**](https://devops.zsoftly.com/)  
+    Book DevOps consultations and get detailed pricing
 
-For emergencies outside of business hours, please email [support@zsoftly.com](mailto:support@zsoftly.com) with "URGENT" in the subject line.
+-   [:fontawesome-brands-aws:{ .icon } **AWS Consultation**](https://cloud.zsoftly.com/)  
+    Schedule AWS consultations and migration discussions
 
-<style>
-.icon {
-  vertical-align: middle;
-  margin-right: 0.5em;
-}
-</style>
+</div>
+
+---
+
+[Back to Home](index.md)

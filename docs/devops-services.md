@@ -1,6 +1,26 @@
 # DevOps Services
 
-Our DevOps services streamline your development and operational workflows to increase efficiency and accelerate innovation.
+**Enterprise-Grade DevOps Solutions for Growing Businesses**
+
+We help startups, solo developers, and growing teams implement DevOps the right way — fast, clean, and reliable. Fix messy CI/CD pipelines, streamline deployments, and accelerate your product delivery.
+
+## Our Track Record
+
+<div class="grid cards" markdown>
+
+-   :fontawesome-solid-gears:{ .lg .middle } **95+ DevOps Projects**  
+    Successfully completed for businesses of all sizes
+
+-   :fontawesome-solid-rocket:{ .lg .middle } **50% Faster Deployments**  
+    Average improvement in deployment times
+
+-   :fontawesome-solid-clock:{ .lg .middle } **24/7 Support**  
+    Available for critical infrastructure needs
+
+-   :fontawesome-solid-star:{ .lg .middle } **100% Client Satisfaction**  
+    Proven track record of successful deliveries
+
+</div>
 
 ## Service Overview
 
@@ -11,6 +31,8 @@ We offer technology-agnostic DevOps solutions, working with both AWS-native tool
 As a complete CI/CD as a Service provider, we can host, manage, and maintain your runners and build infrastructure, eliminating the need for you to worry about scaling, maintaining, or managing your CI/CD environments. This fully managed approach allows your development teams to focus on building great software while we ensure your delivery pipeline is always available, secure, and optimized.
 
 ## Services Included
+
+## Technical Implementation Details
 
 ### Architecture and CI/CD Principles
 - DevOps maturity assessment
@@ -29,7 +51,7 @@ As a complete CI/CD as a Service provider, we can host, manage, and maintain you
 
 #### Open Source & SaaS Tools
 - Jenkins pipeline implementation and management
-- GitLab CI/CD configuration and optimization
+- GitLab CI/CD configuration and optimization (Official Partner)
 - GitHub Actions workflow design and implementation
 - ArgoCD deployment for GitOps practices
 - Terraform and CloudFormation implementation
@@ -48,6 +70,32 @@ As a complete CI/CD as a Service provider, we can host, manage, and maintain you
 - Incident response processes
 - Performance optimization
 - GitOps operational models with ArgoCD
+
+## Technology Stack
+
+### AWS-Native Tools
+- AWS CodePipeline
+- AWS CodeBuild
+- AWS CodeDeploy
+- AWS CodeCommit
+- Amazon ECR
+- Amazon ECS/EKS
+- AWS CloudFormation
+- AWS Lambda
+- Amazon CloudWatch
+- AWS Systems Manager
+
+### Open Source & SaaS Solutions
+- Jenkins
+- GitLab CI/CD
+- GitHub Actions
+- ArgoCD
+- Terraform
+- Kubernetes
+- Helm
+- Prometheus & Grafana
+- SonarQube
+- Nexus/Artifactory
 - CI/CD pipeline maintenance (Jenkins, GitHub Actions, GitLab, AWS CodePipeline)
 
 ### Infrastructure Management
@@ -58,6 +106,10 @@ As a complete CI/CD as a Service provider, we can host, manage, and maintain you
 
 ## Key Benefits
 
+- **95+ DevOps Projects Completed** - Proven track record of successful implementations
+- **50% Faster Deployment Times** - Streamlined workflows accelerate your development cycles
+- **24/7 Support Available** - Round-the-clock monitoring and incident response
+- **100% Client Satisfaction** - Committed to delivering exceptional results
 - Accelerated software delivery cycles
 - Improved collaboration between development and operations
 - Infrastructure as Code (IaC) implementation
@@ -67,6 +119,17 @@ As a complete CI/CD as a Service provider, we can host, manage, and maintain you
 - Fully managed CI/CD infrastructure without capital expenses
 - Scalable build environments that grow with your needs
 - Reduced maintenance overhead for DevOps tooling
+
+## GitLab Partnership
+
+As an official GitLab partner, ZSoftly provides specialized expertise in GitLab implementation and optimization. Our partnership enables us to offer:
+
+- **Enhanced Support**: Direct access to GitLab technical resources and expert guidance
+- **Specialized Training**: Advanced GitLab certifications and best practices knowledge  
+- **Optimized Implementations**: Proven methodologies for GitLab deployment and configuration
+- **Strategic Guidance**: GitLab roadmap insights and feature optimization recommendations
+
+Whether you're migrating to GitLab, optimizing existing implementations, or building comprehensive GitOps workflows, our partnership ensures you get the maximum value from your GitLab investment.
 
 ## Service Delivery Model
 
@@ -110,13 +173,20 @@ We deliver our DevOps services through our proven four-level framework:
 - SonarQube
 - Nexus/Artifactory
 
-## Contact Us
+## Pricing & Detailed Services
 
-Ready to transform your development and operations processes? Contact us to discuss your specific DevOps needs.
+For comprehensive pricing details, complete service descriptions, our proven 4-step process, and to schedule a consultation:
 
-- **Website**: [https://zsoftly.com](https://zsoftly.com)
-- **Email**: info@zsoftly.com
-- **Phone**: +1 (613) 979-1065
+[**Get DevOps Pricing & Book Consultation**](https://devops.zsoftly.com/){ .md-button .md-button--primary }
+
+## Contact & Support
+
+For general inquiries and support:
+
+- **Email**: [info@zsoftly.com](mailto:info@zsoftly.com)
+- **Phone**: +1 (343) 503-0513
+
+**For DevOps-specific pricing and consultation booking, visit:** [devops.zsoftly.com](https://devops.zsoftly.com/)
 
 ---
 

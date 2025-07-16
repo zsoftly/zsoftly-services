@@ -94,7 +94,7 @@ Ready to enhance your security posture? Contact us to discuss your specific secu
 
 - **Website**: [https://zsoftly.com](https://zsoftly.com)
 - **Email**: info@zsoftly.com
-- **Phone**: +1 (613) 979-1065
+- **Phone**: +1 (343) 503-0513
 
 ---
 

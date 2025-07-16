@@ -4,7 +4,7 @@
   <img class="company-logo" alt="ZSoftly Logo">
 </div>
 
-## Enterprise-Grade IT Solutions for Mid-Market Businesses
+## Enterprise-Grade IT Solutions for Mid-Market Businessess
 
 ZSoftly delivers comprehensive IT solutions tailored specifically for mid-market businesses. Our services bridge the gap between enterprise capabilities and mid-market budgets, offering you the technological advantages of larger competitors without the excessive costs.
 
@@ -18,6 +18,9 @@ ZSoftly delivers comprehensive IT solutions tailored specifically for mid-market
 - [:fontawesome-solid-gears:{ .icon } **DevOps Services**](devops-services.md)  
   Streamline your development and operations with automated workflows.
 
+- [:fontawesome-brands-aws:{ .icon } **AWS Cloud Services**](cloud-services.md)  
+  Complete AWS solutions from migration to managed services by certified professionals.
+
 - [:fontawesome-solid-cloud:{ .icon } **Cloud Migration**](cloud-migration.md)  
   Move your business to the cloud securely and efficiently.
 
@@ -29,13 +32,63 @@ ZSoftly delivers comprehensive IT solutions tailored specifically for mid-market
 ## Why Choose ZSoftly?
 
 - **Enterprise Experience**: Our team brings Fortune 500 expertise to mid-market companies
-- **Customized Approach**: Solutions tailored to your specific business needs
-- **Continuous Support**: Ongoing assistance throughout implementation and beyond
-- **Cost-Effective**: Enterprise-grade solutions at mid-market prices
+- **Proven Results**: 95+ DevOps projects completed, 50+ AWS migrations delivered
+- **Certified Expertise**: 100% AWS-certified team with continuous training
+- **Continuous Support**: 24/7 monitoring and support available
+- **Cost-Effective**: Enterprise-grade solutions at mid-market prices with transparent pricing
+- **Client Satisfaction**: 100% client satisfaction rate across all service areas
+
+## Our Track Record
+
+<div class="grid cards" markdown>
+
+-   **95+**  
+    DevOps Projects Completed
+
+-   **50+**  
+    AWS Migrations Delivered  
+
+-   **50%**  
+    Faster Deployment Times
+
+-   **40%**  
+    Average Cost Savings on AWS
+
+-   **100%**  
+    AWS-Certified Team
+
+-   **100%**  
+    Client Satisfaction Rate
+
+</div>
+
+## Specialized Service Portals
+
+For detailed pricing, service information, and consultation booking, visit our specialized portals:
+
+<div class="grid cards" markdown>
+
+-   [:fontawesome-solid-gears:{ .icon } **DevOps Portal**](https://devops.zsoftly.com/)  
+    Complete DevOps solutions with detailed pricing and consultation booking
+
+-   [:fontawesome-brands-aws:{ .icon } **AWS & Cloud Portal**](https://cloud.zsoftly.com/)  
+    Specialized AWS services, migration expertise, and cloud architecture
+
+</div>
 
 ## Get Started
 
 Ready to elevate your IT capabilities? Contact us today for a free consultation.
+
+<div class="grid cards" markdown>
+
+-   [:fontawesome-regular-envelope:{ .icon } **Contact Us**](contact.md)  
+    Get in touch for a free consultation
+
+-   [:fontawesome-solid-dollar-sign:{ .icon } **View Pricing**](pricing.md)  
+    Transparent pricing for all services
+
+</div>
 
 <a href="contact/" class="md-button md-button--primary">
   <span class="twemoji">
@@ -83,12 +136,32 @@ Ready to elevate your IT capabilities? Contact us today for a free consultation.
 }
 </style>
 
+## Strategic Partnerships
+
+As official partners with industry-leading technology providers, ZSoftly offers enhanced expertise, specialized support, and optimized implementations:
+
+<div class="grid cards" markdown>
+
+- [:fontawesome-solid-shield-halved:{ .icon } **Vanta**](https://vanta.com)  
+  Automated compliance monitoring and security platform
+
+- [:fontawesome-solid-shield-halved:{ .icon } **Prisma Cloud**](https://prismacloud.io)  
+  Palo Alto Networks' comprehensive cloud security platform
+
+- [:fontawesome-solid-users:{ .icon } **JumpCloud**](https://jumpcloud.com)  
+  Cloud directory platform for unified identity management
+
+- [:fontawesome-brands-gitlab:{ .icon } **GitLab**](https://gitlab.com)  
+  Complete DevOps platform for modern software delivery
+
+</div>
+
 ## Open Source Expertise
 
 ZSoftly provides expertise in implementing and managing a wide range of open source tools. We help organizations successfully adopt, integrate, and maintain solutions such as:
 
 - **Identity & Access Management**: Keycloak, Authentik, JumpCloud (Official Partner)
-- **DevOps Tools**: Gitea, Harbor Registry
+- **DevOps Tools**: Gitea, Harbor Registry, GitLab (Official Partner)
 - **Security & Monitoring**: Wazuh, SigNoz, Prisma Cloud (Official Partner)
 - **Observability**: Datadog, Traefik
 - **Compliance Automation**: Vanta (Official Partner)
@@ -114,7 +187,7 @@ Ready to transform your technology infrastructure? Contact us today to schedule 
 
 - **Website**: [https://zsoftly.com](https://zsoftly.com)
 - **Email**: info@zsoftly.com
-- **Phone**: +1 (613) 979-1065
+- **Phone**: +1 (343) 503-0513
 - **LinkedIn**: [ZSoftly Technologies Inc.](https://www.linkedin.com/company/zsoftly-technologies)
 - **GitHub**: [ZSoftly](https://github.com/zsoftly)
 - **Address**: 116 Albert Street, Suite 300, Ottawa, Ontario K1P 5G3
