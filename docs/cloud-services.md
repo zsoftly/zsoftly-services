@@ -8,7 +8,7 @@ We help startups, solo developers, and growing teams harness the full power of A
 
 <div class="grid cards" markdown>
 
--   :fontawesome-brands-aws:{ .lg .middle } **50+ AWS Migrations**  
+-   :fontawesome-brands-aws:{ .lg .middle } **10+ AWS Migrations**  
     Successfully completed for businesses of all sizes
 
 -   :fontawesome-solid-users:{ .lg .middle } **100% AWS-Certified Team**  
