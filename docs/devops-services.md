@@ -8,7 +8,7 @@ We help startups, solo developers, and growing teams implement DevOps the right 
 
 <div class="grid cards" markdown>
 
--   :fontawesome-solid-gears:{ .lg .middle } **95+ DevOps Projects**  
+-   :fontawesome-solid-gears:{ .lg .middle } **100+ DevOps Projects**  
     Successfully completed for businesses of all sizes
 
 -   :fontawesome-solid-rocket:{ .lg .middle } **50% Faster Deployments**  
@@ -106,7 +106,7 @@ As a complete CI/CD as a Service provider, we can host, manage, and maintain you
 
 ## Key Benefits
 
-- **95+ DevOps Projects Completed** - Proven track record of successful implementations
+- **100+ DevOps Projects Completed** - Proven track record of successful implementations
 - **50% Faster Deployment Times** - Streamlined workflows accelerate your development cycles
 - **24/7 Support Available** - Round-the-clock monitoring and incident response
 - **100% Client Satisfaction** - Committed to delivering exceptional results

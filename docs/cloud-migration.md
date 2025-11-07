@@ -40,7 +40,7 @@ ZSoftly's cloud migration services enable mid-market companies to successfully m
 
 ## Key Benefits
 
-- **50+ AWS Migrations Completed** - Proven expertise in successful cloud transitions
+- **10+ AWS Migrations Completed** - Proven expertise in successful cloud transitions
 - **100% AWS-Certified Team** - All team members hold current AWS certifications
 - **40% Average Cost Savings** - Optimized architectures deliver significant cost reductions
 - **24/7 AWS Support Available** - Round-the-clock monitoring and incident response

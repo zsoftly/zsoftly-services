@@ -32,7 +32,7 @@ ZSoftly delivers comprehensive IT solutions tailored specifically for mid-market
 ## Why Choose ZSoftly?
 
 - **Enterprise Experience**: Our team brings Fortune 500 expertise to mid-market companies
-- **Proven Results**: 95+ DevOps projects completed, 50+ AWS migrations delivered
+- **Proven Results**: 100+ DevOps projects completed, 10+ AWS migrations delivered
 - **Certified Expertise**: 100% AWS-certified team with continuous training
 - **Continuous Support**: 24/7 monitoring and support available
 - **Cost-Effective**: Enterprise-grade solutions at mid-market prices with transparent pricing
@@ -42,13 +42,13 @@ ZSoftly delivers comprehensive IT solutions tailored specifically for mid-market
 
 <div class="grid cards" markdown>
 
--   **95+**  
+-   **100+**  
     DevOps Projects Completed
 
--   **50+**  
+-   **10+**  
     AWS Migrations Delivered  
 
--   **50%**  
+-   **25%**  
     Faster Deployment Times
 
 -   **40%**  
@@ -151,8 +151,8 @@ As official partners with industry-leading technology providers, ZSoftly offers 
 - [:fontawesome-solid-users:{ .icon } **JumpCloud**](https://jumpcloud.com)  
   Cloud directory platform for unified identity management
 
-- [:fontawesome-brands-gitlab:{ .icon } **GitLab**](https://gitlab.com)  
-  Complete DevOps platform for modern software delivery
+- [:fontawesome-brands-gitlab:{ .icon } **GitLab**](https://about.gitlab.com/partners/channel-partners/#/?f0=MailingCountry&f0v0=Canada)  
+  Official GitLab Channel Partner - Complete DevOps platform for modern software delivery
 
 </div>
 
@@ -179,7 +179,7 @@ We are actively working toward achieving AWS Advanced Tier Partner status by Sep
 3. **SMB Focus**: Specialized in right-sizing enterprise solutions for mid-market companies
 4. **Compliance Expertise**: Deep understanding of regulatory requirements for Canadian businesses
 5. **Enterprise-Grade, Cost-Effective Solutions**: Delivering high-quality services at accessible price points
-6. **Strategic Partnerships**: Official partnerships with industry leaders including Vanta, Palo Alto's Prisma Cloud, and JumpCloud
+6. **Strategic Partnerships**: Official partnerships with industry leaders including Vanta, Palo Alto's Prisma Cloud, JumpCloud, and GitLab
 
 ## Get Started
 
